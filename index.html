@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b2a5b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Exambro SMANPro">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><title>Exambro SMANPro</title>
+<style>
+:root{--navy:#0a2551;--blue:#0a6fc2;--sky:#e8f2fc;--gold:#ffd200;--green:#0a9b4b;--red:#d62839;--ink:#142033;--mut:#5d6b82}
+*{box-sizing:border-box;margin:0}html,body{height:100%;overscroll-behavior:none}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--navy);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,select,button{font:inherit}input,select{-webkit-user-select:text;user-select:text}
+.scr{display:none;position:fixed;inset:0;overflow:auto;padding:env(safe-area-inset-top) 0 0}.scr.on{display:flex;flex-direction:column}
+.hero{color:#fff;text-align:center;padding:26px 20px 34px;text-shadow:0 2px 10px rgba(0,20,60,.8)}
+.hero h1{font-size:19px;letter-spacing:.2px;margin-top:6px}.hero p{opacity:.85;font-size:13px}
+.stage{perspective:900px;height:170px;display:flex;justify-content:center;align-items:center}
+.l3{position:relative;width:118px;height:150px;transform-style:preserve-3d;animation:sway 10s linear infinite}
+.l3 img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.l3 .sd{filter:brightness(.62) saturate(1.25)}.l3 .tp,.l3 .bk{backface-visibility:hidden;-webkit-backface-visibility:hidden}.l3 .tp{filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+.l3:after{content:"";position:absolute;inset:0;transform:translateZ(15px);backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);background-size:250% 100%;animation:shine 10s ease-in-out infinite;-webkit-mask:url(logo.png) center/contain no-repeat;mask:url(logo.png) center/contain no-repeat}
+@keyframes sway{from{transform:rotateX(6deg) rotateY(0deg)}to{transform:rotateX(6deg) rotateY(360deg)}}
+@keyframes shine{0%{background-position:150% 0}60%,100%{background-position:-50% 0}}
+.card{background:rgba(255,255,255,.96);margin:-18px 14px 0;border-radius:14px;padding:18px;box-shadow:0 8px 28px rgba(5,20,50,.35);position:relative}
+.card h2{font-size:16px;color:var(--navy);margin-bottom:10px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 3px}
+input,select{width:100%;padding:11px 12px;border:1.5px solid #c9d5e6;border-radius:9px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:3px solid #9cc8f2;border-color:var(--blue)}
+.btn{display:block;width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:700}
+.btn:disabled{background:#9fb3cc}.btn.g{background:var(--green)}.btn.y{background:var(--gold);color:var(--navy)}.btn.o{background:#e8eef7;color:var(--navy)}
+.note{font-size:12.5px;color:var(--mut);margin-top:10px}.clock{float:right;font-weight:700;color:var(--blue)}
+.ft{margin-top:auto;padding:16px 10px calc(14px + env(safe-area-inset-bottom));text-align:center;color:#fff;font-size:12px;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+#login,#gate,#done{background:linear-gradient(rgba(6,28,66,.5),rgba(6,28,66,.2) 45%,rgba(6,28,66,.55)),url(bg.jpg) center top/cover no-repeat,var(--navy)}
+#exam{background:linear-gradient(rgba(6,28,66,.4),rgba(6,28,66,.4)),url(bg.jpg) center/cover no-repeat,var(--navy)}.hd{display:flex;align-items:center;gap:10px;background:rgba(10,37,81,.9);color:#fff;padding:6px 10px;border-bottom:3px solid var(--gold)}
+.hd .l3{width:30px;height:38px;animation:none;transform:rotateY(-18deg)}.hd .who{flex:1;min-width:0;font-size:12px;line-height:1.25}.who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tm{font:700 20px ui-monospace,Menlo,monospace;background:var(--green);padding:4px 10px;border-radius:8px}#tm.w{background:#e98a00}#tm.d{background:var(--red);animation:bl 1s infinite}@keyframes bl{50%{opacity:.55}}
+.hd button{border:0;background:var(--gold);color:var(--navy);font-weight:700;border-radius:8px;padding:7px 10px;font-size:12px}
+iframe{flex:1;width:calc(100% - 12px);margin:6px;border:0;border-radius:10px;background:#fff}.sm{background:rgba(10,37,81,.9);padding:3px;font-size:10.5px;text-align:center;color:#c5d4ea;padding-bottom:calc(3px + env(safe-area-inset-bottom))}
+.ov{display:none;position:fixed;inset:0;z-index:9;background:rgba(10,37,81,.97);color:#fff;align-items:center;justify-content:center;text-align:center;padding:26px;flex-direction:column}.ov.on{display:flex}
+.ov h2{font-size:22px;color:var(--gold);margin-bottom:8px}.ov input{max-width:240px;text-align:center;color:var(--ink);margin-top:12px}.ov .btn{max-width:260px}
+.row{border:1.5px solid #dbe4f0;border-radius:10px;padding:8px;margin:8px 0;background:#f7faff}.row input{margin:3px 0;padding:8px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.st{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;background:#e8eef7}.chk{display:flex;gap:8px;align-items:center;margin:8px 0;font-size:13.5px;color:var(--ink)}.chk input{width:auto}
+a.adm{color:#c5d4ea;text-decoration:underline;font-size:11px;background:0;border:0}
+@media(prefers-reduced-motion:reduce){.l3,.l3:after{animation:none}}
+textarea{width:100%;padding:10px;border:1.5px solid #c9d5e6;border-radius:9px;font:12.5px ui-monospace,monospace;color:var(--ink);-webkit-user-select:text;user-select:text}
+.sg{display:none;position:absolute;left:0;right:0;top:100%;z-index:6;background:#fff;border:1.5px solid #c9d5e6;border-radius:9px;max-height:230px;overflow:auto;box-shadow:0 8px 20px rgba(5,20,50,.25)}
+.sg div{padding:11px 12px;border-bottom:1px solid #eef2f8;font-weight:600;color:var(--navy)}.sg small{color:var(--mut);font-weight:400}
+.card2{margin:14px}.pt{padding-left:20px;font-size:13.5px}.pt li{margin:6px 0}.row .btn{margin:3px 0;padding:9px}
+[id*="netlify" i],[class*="netlify" i],a[href*="netlify.com"],iframe[src*="netlify"]{display:none!important}
+#lt{font-size:17px;line-height:1.3}
+#ni:read-only,select:disabled{background:#eef3fa;color:var(--ink);-webkit-text-fill-color:var(--ink);opacity:1}
+
+button,select,.btn,.bt,input[type=checkbox],label[for],nav button,.sg div,a{cursor:pointer}
+button:disabled,.btn:disabled{cursor:not-allowed}
+#pp{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:40;background:rgba(10,37,81,.95);color:#ffe066;padding:16px 22px;border-radius:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);align-items:center;gap:12px;max-width:86vw;text-align:left}
+#pp.on{display:flex}#pp.ok{color:#7dffb0}#pp.er{color:#ff9aa5}
+.sp{width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top-color:#ffe066;border-radius:50%;animation:spin .8s linear infinite;flex:none}#pp.ok .sp,#pp.er .sp{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ov.dl{background:rgba(5,20,50,.75);z-index:30}.dg{background:#fff;color:var(--ink);border-radius:14px;padding:20px;width:100%;max-width:340px;text-align:left}
+.dg h3{color:var(--navy);margin-bottom:8px}.dg p{white-space:pre-line;font-size:14px}.dgb{display:flex;gap:8px}.dgb .btn{margin-top:14px}.dg input{max-width:none;margin-top:12px}
+select.fd{color:#9aa7bb!important;-webkit-text-fill-color:#9aa7bb!important}
+</style></head><body>
+
+<section class="scr" id="gate"><div class="hero"><div class="stage"><div class="l3 lg"></div></div><h1>Pasang Aplikasi Ujian</h1><p>SMA Negeri 1 Pronojiwo</p></div>
+<div class="card"><h2>Ujian hanya bisa dibuka dari aplikasi</h2>
+<button class="btn g" id="inst" style="display:none">Pasang aplikasi sekarang</button>
+<p class="note" id="ios" style="display:none"><b>iPhone (Safari):</b> ketuk tombol Bagikan, pilih <b>Tambah ke Layar Utama</b>, lalu buka ikon “Exambro SMANPro” dari layar utama.</p>
+<p class="note" id="and" style="display:none"><b>Android (Chrome):</b> ketuk menu ⋮, pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>, lalu buka ikon aplikasinya.</p></div>
+<div class="ft">Created by SMAN 1 Pronojiwo</div></section>
+
+<section class="scr" id="login"><div class="hero"><div class="stage"><div class="l3 lg"></div></div><h1 id="lt">Asesmen Sumatif Akhir Semester Ganjil<br>Tahun Ajaran 2026/2027</h1><p id="lp">SMA Negeri 1 Pronojiwo · Jl. A. Yani - Pronojiwo</p></div>
+<div class="card"><h2 id="pjt">PETUNJUK PENGERJAAN UJIAN</h2><ol class="pt" id="pjl">
+<li>Matikan <b>Wi-Fi</b> dan gunakan <b>paket data</b>.</li>
+<li>Ketik minimal 3 huruf nama Anda, lalu <b>pilih nama</b> dari saran yang muncul. Pilih kelas.</li>
+<li>Pilih mata pelajaran, masukkan <b>token</b> dari pengawas, lalu tekan <b>Mulai ujian</b>.</li>
+<li>Kerjakan soal pada formulir. Sisa waktu tampil di pojok kanan atas dan berubah warna saat hampir habis.</li>
+<li>Jangan menekan tombol Kembali, power, atau membuka aplikasi lain. Layar akan <b>terkunci</b> dan hanya pengawas yang bisa membukanya dengan kode.</li>
+<li>Setelah selesai, tekan <b>Kirim</b> di formulir, lalu tekan <b>Selesai</b> dan minta kode kepada pengawas.</li>
+<li>Jika waktu habis, ujian tertutup otomatis.</li></ol></div>
+<div class="card card2"><span class="clock" id="ck"></span><h2>Data peserta</h2>
+<label>Nama lengkap (ketik 3 huruf, lalu pilih dari saran)</label><div style="position:relative"><input id="nm" autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase"><div class="sg" id="sg"></div></div><div class="g2"><div><label>Kelas</label><select id="kl"><option value="">Pilih kelas</option></select></div><div><label>NISN</label><input id="ni" inputmode="numeric" autocomplete="off"></div></div>
+<label id="lbm">Mata pelajaran</label><select id="ex"></select><div id="tkw" style="display:none"><label>Token ujian (dari pengawas)</label><input id="tk" autocomplete="off" autocapitalize="characters" style="text-transform:uppercase"></div>
+<button class="btn" id="go">Mulai ujian</button>
+<p class="note" id="info">Aplikasi akan terkunci jika Anda keluar dari halaman ujian.</p></div>
+<div class="ft">Created by SMAN 1 Pronojiwo</div></section>
+
+<section class="scr" id="exam"><div class="hd"><div class="l3 sm1"></div><div class="who"><b id="wn"></b><span id="wm"></span></div><span id="tm">--:--</span><button id="fin">Selesai</button></div>
+<iframe id="fr" title="Formulir ujian" allow="fullscreen" referrerpolicy="no-referrer"></iframe><div class="sm">Created by SMAN 1 Pronojiwo</div></section>
+
+<section class="scr" id="done"><div class="hero"><div class="stage"><div class="l3 lg"></div></div><h1 id="dt">Ujian selesai</h1><p id="dm"></p></div>
+<div class="card"><button class="btn" onclick="location.reload()">Kembali ke beranda</button></div><div class="ft">Created by SMAN 1 Pronojiwo</div></section>
+
+
+
+<div class="ov" id="warn"><h2>⚠ Anda meninggalkan halaman ujian</h2><p id="wt"></p><button class="btn y" id="wb" disabled>Kembali ke ujian</button></div>
+<div class="ov" id="lock"><h2>Ujian terkunci</h2><p>Pelanggaran melebihi batas. Serahkan perangkat ke pengawas untuk memasukkan kode buka.</p><input id="kc" placeholder="Kode pengawas" autocomplete="off"><button class="btn y" id="ub">Buka kunci</button></div>
+
+<div class="ov" id="early"><h2>Terlalu cepat mengirim jawaban</h2><p id="etx"></p><p id="eid" style="margin-top:10px;font-weight:700"></p><input id="ec" placeholder="Token dari admin" autocomplete="off" autocapitalize="characters"><button class="btn y" id="eb">Reset</button></div>
+<div class="ov dl" id="dlg"><div class="dg"><h3 id="dgt"></h3><p id="dgm"></p><input id="dgi" autocomplete="off" autocapitalize="characters" style="display:none"><div class="dgb"><button class="btn o" id="dgn">Batal</button><button class="btn g" id="dgy">Ya</button></div></div></div>
+<div id="pp"><div class="sp"></div><span id="ppt"></span></div>
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const DEF={wajibInstal:false,maksPelanggaran:3,kodeBuka:"4321",pin:"123456",jadwal:[]};
+let cfg=DEF,S=JSON.parse(localStorage.sess||"null"),act=false,tk,hid=0,dp,wl;
+const J=k=>JSON.parse(localStorage.getItem(k)||"null"),sv=()=>localStorage.sess=JSON.stringify(S);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>new Date(d).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"});
+const show=id=>{document.querySelectorAll(".scr").forEach(e=>e.classList.toggle("on",e.id===id))};
+// logo 3D: tumpukan lapisan = ketebalan
+function logo3(el,n){const f=(c,z,x)=>{const m=new Image();m.src="logo.png";m.className=c;m.style.transform="translateZ("+z+"px)"+(x||"");el.append(m)};
+ for(let i=0;i<n;i++)f("sd",-7+i*14/n);f("bk",-9,"rotateY(180deg)");f("tp",9)}
+document.querySelectorAll(".lg").forEach(e=>logo3(e,12));document.querySelectorAll(".sm1").forEach(e=>logo3(e,5));
+const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true||/SMAN1ExamApp/.test(navigator.userAgent);
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;$("#inst").style.display="block"});
+$("#inst").onclick=async()=>{if(dp){dp.prompt();await dp.userChoice}};
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+let APID=null;
+async function api(){if(typeof API_URL==="undefined"||!API_URL)return null;const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
+ try{const r=await fetch(API_URL+(API_URL.includes("?")?"&":"?")+"t="+Date.now(),{cache:"no-store",signal:c.signal});const d=await r.json();if(d&&d.cfg)return d}catch(e){}finally{clearTimeout(t)}return null}
+async function load(){localStorage.removeItem("cfgLocal");localStorage.removeItem("siswaLocal");
+ const hasApi=typeof API_URL!=="undefined"&&API_URL;APID=await api();
+ if(APID&&APID.cfg&&APID.cfg.saved)cfg=APID.cfg;
+ else if(hasApi&&!APID&&J("cfgCache"))cfg=J("cfgCache");
+ else{try{const r=await fetch("jadwal.json?"+Date.now(),{cache:"no-store"});cfg=await r.json()}catch(e){cfg=J("cfgCache")||DEF}}
+ cfg.jadwal=cfg.jadwal||[];localStorage.cfgCache=JSON.stringify(cfg)}
+const stat=j=>{const n=Date.now();return n<+new Date(j.mulai)?"soon":n>+new Date(j.selesai)?"over":"open"};
+const norm=u=>{u=u.trim();return u.includes("embedded=true")?u:u+(u.includes("?")?"&":"?")+"embedded=true"};
+const valid=j=>j.mapel&&j.link&&j.mulai&&j.selesai&&!isNaN(+new Date(j.mulai))&&!isNaN(+new Date(j.selesai));
+const kelasCocok=(j,kl)=>{if(!kl)return false;const L=j.kelasList;if(Array.isArray(L)&&L.length)return L.includes(kl);const t=String(j.kelas||"").trim().toUpperCase();if(!t||t=="SEMUA KELAS")return true;
+ const m=t.match(/^SEMUA KELAS (XII|XI|X)$/);if(m)return kl.startsWith(m[1]+"-");return t.split(/[,;]\s*/).some(x=>x.trim()==kl)};
+function renderList(){const o=$("#ex"),v=o.value,kl=$("#kl").value,L=cfg.jadwal.filter(j=>valid(j)&&stat(j)=="open"&&kelasCocok(j,kl));o.innerHTML="";
+ if(!L.length){const p=document.createElement("option");p.value="";p.textContent=kl?"Belum ada mapel yang diujikan":(SL.length?"Pilih nama Anda terlebih dahulu":"Pilih kelas terlebih dahulu");o.append(p);o.disabled=true;o.classList.add("fd");$("#go").disabled=true;$("#tkw").style.display="none";return}
+ o.classList.remove("fd");o.disabled=false;L.forEach(j=>{const p=document.createElement("option");p.value=j.id;p.textContent=j.mapel;o.append(p)});
+ o.value=(v&&L.some(j=>j.id==v))?v:L[0].id;$("#go").disabled=false;const jj=L.find(x=>x.id==o.value);$("#tkw").style.display=jj&&(jj.token||jj.tokenAuto)?"block":"none"}
+setInterval(()=>{$("#ck").textContent=new Date().toLocaleTimeString("id-ID");if($("#login").classList.contains("on")){const g=cfg.jadwal.map(stat).join()+"|"+$("#kl").value;if(g!==lg){lg=g;renderList()}}},1000);
+$("#ex").onchange=renderList;
+async function boot(){await load();await loadSiswa();applyText();
+ if(cfg.wajibInstal&&!standalone()){show("gate");const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);$(ios?"#ios":"#and").style.display="block";return}
+ if(S&&S.end>Date.now()&&cfg.jadwal.find(j=>j.id==S.id)){enter();return}
+ renderList();show("login")}
+const err=m=>{$("#info").textContent=m;$("#info").style.color="#d62839"};
+$("#go").onclick=async()=>{let nm=$("#nm").value.trim().toUpperCase(),kl=$("#kl").value,ni=$("#ni").value.trim();const tk=$("#tk").value.trim().toUpperCase(),j=cfg.jadwal.find(x=>x.id==$("#ex").value);
+ if(SL.length&&!kl){const m=SL.filter(x=>x.n==nm);if(m.length==1){kl=m[0].k;$("#kl").value=kl}}
+ if(!nm||!kl)return err("Ketik nama (minimal 3 huruf), pilih nama dari saran, lalu pilih kelas.");
+ if(SL.length){const e=SL.find(x=>x.n==nm&&x.k==kl);if(!e)return err("Nama atau kelas tidak cocok dengan daftar siswa. Pilih nama dari saran yang muncul.");ni=e.i||e.n}
+ if(!ni)return err("Isi NISN.");
+ if(!j||stat(j)!="open"||!kelasCocok(j,kl))return err("Pilih mata pelajaran yang sedang diujikan untuk kelas Anda.");
+ if(j.tokenAuto){if(!ZK.tokenOK(j.tokenSecret||"",+j.tokenMenit||15,tk))return err("Token salah atau sudah berganti. Minta token terbaru kepada pengawas.")}else if(j.token&&tk!==String(j.token).toUpperCase())return err("Token ujian salah. Minta token kepada pengawas.");
+ const dn=J("done")||{},key=nm+"|"+kl+"|"+ni+"|"+j.id;if(dn[key])return err("Anda sudah menyelesaikan ujian ini.");
+ popOff();
+ if(!await ask({t:"Periksa data Anda",m:"Nama: "+nm+"\nKelas: "+kl+"\nNISN: "+ni+"\n"+(cfg.labelPilih||"Mata pelajaran")+": "+j.mapel+"\n\nApakah data yang Anda isi sudah benar dan lanjut memulai ujian?",y:"Ya, mulai",n:"Periksa lagi"}))return;
+ pop("Sedang memproses data…");await wait(800);
+ S={id:j.id,key,nm,kl,ni,st:Date.now(),end:Math.min(Date.now()+j.durasi*60000,+new Date(j.selesai)),v:[]};sv();enter();setTimeout(popOff,600)};
+function buildUrl(l){try{const u=new URL(l.trim()),m={NAMA:S.nm,KELAS:S.kl,NISN:S.ni};
+ [...u.searchParams.entries()].forEach(([k,v])=>{const x=m[v.trim().toUpperCase()];if(x!==undefined)u.searchParams.set(k,x)});
+ u.searchParams.set("embedded","true");return u.toString()}catch(e){return norm(l)}}
+async function enter(){const j=cfg.jadwal.find(x=>x.id==S.id);$("#wn").textContent=S.nm;$("#wm").textContent=`${S.kl} · ${j.mapel}`;
+ loads=0;$("#fr").src=buildUrl(j.link);show("exam");act=true;
+ try{await document.documentElement.requestFullscreen?.()}catch(e){}try{wl=await navigator.wakeLock?.request("screen")}catch(e){}
+ clearInterval(tk);tk=setInterval(tick,500);tick();if(S.v.length>=cfg.maksPelanggaran)lockIt();if(S.early)showEarly()}
+function tick(){const r=S.end-Date.now();if(r<=0)return finish("Waktu ujian habis","Jawaban yang sudah Anda kirim melalui formulir telah tersimpan.");
+ const s=Math.ceil(r/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),t=$("#tm");
+ t.textContent=(h?h+":":"")+String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");t.className=r<300000?"d":r<600000?"w":""}
+function finish(t,m){act=false;clearInterval(tk);$("#fr").src="about:blank";const d=J("done")||{};d[S.key]=Date.now();localStorage.done=JSON.stringify(d);
+ localStorage.removeItem("sess");S=null;document.exitFullscreen?.().catch(()=>{});$("#warn").classList.remove("on");$("#lock").classList.remove("on");$("#early").classList.remove("on");
+ $("#dt").textContent=t;$("#dm").textContent=m;show("done")}
+$("#fin").onclick=async()=>{const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kirimSisa||0,rem=(S.end-Date.now())/60000,lim=N>0?N:10;
+ const out=async()=>{pop("Sedang memproses data…");await wait(800);popOff();finish("Ujian selesai","Terima kasih, "+S.nm+".")};
+ if(rem<=lim){if(await ask({t:"Akhiri ujian?",m:"Pastikan Anda sudah menekan tombol KIRIM di formulir.\nApakah Anda yakin ingin mengakhiri ujian sekarang?",y:"Ya, akhiri",n:"Belum"}))out();return}
+ const k=await ask({t:"Minta kode kepada pengawas",m:"Waktu ujian belum berakhir"+(N>0?" (jawaban baru boleh dikirim "+N+" menit sebelum waktu habis)":"")+".\nHanya pengawas yang dapat mengakhiri ujian lebih awal. Masukkan kode keluar dari pengawas.",input:true,ph:"Kode keluar",y:"Keluar",n:"Batal"});
+ if(k===null)return;
+ if(k.toUpperCase()!==String(cfg.kodeBuka).toUpperCase()){await ask({t:"Kode salah",m:"Hubungi pengawas ujian.",y:"Mengerti",n:false});return}
+ out()};
+history.pushState(null,"",location.href);addEventListener("popstate",()=>{if(act)history.pushState(null,"",location.href)});
+// ---- pengawasan ----
+function viol(why){if(!act||$("#lock").classList.contains("on"))return;S.v.push({t:Date.now(),w:why});sv();const n=S.v.length,mx=cfg.maksPelanggaran;
+ if(n>=mx)return lockIt();$("#wt").textContent=`Pelanggaran ${n} dari ${mx} (${why}). Pada pelanggaran ke-${mx} layar ujian terkunci.`;
+ $("#warn").classList.add("on");const b=$("#wb");b.disabled=true;let c=4;b.textContent="Tunggu "+c+" dtk";
+ const i=setInterval(()=>{c--;if(c<=0){clearInterval(i);b.disabled=false;b.textContent="Kembali ke ujian"}else b.textContent="Tunggu "+c+" dtk"},1000)}
+function lockIt(){$("#warn").classList.remove("on");$("#lock").classList.add("on");$("#kc").value=""}
+$("#wb").onclick=async()=>{$("#warn").classList.remove("on");try{await document.documentElement.requestFullscreen?.()}catch(e){}};
+$("#ub").onclick=()=>{if($("#kc").value.trim()===cfg.kodeBuka){S.v=S.v.slice(0,cfg.maksPelanggaran-1);sv();$("#lock").classList.remove("on")}else{$("#kc").value="";$("#kc").placeholder="Kode salah"}};
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&act)hid=1;else if(hid&&act){hid=0;viol("berpindah aplikasi/tab")}});
+addEventListener("pagehide",()=>{if(act)hid=1});
+document.addEventListener("fullscreenchange",()=>{if(act&&!document.fullscreenElement&&document.documentElement.requestFullscreen&&!document.hidden)viol("keluar layar penuh")});
+addEventListener("resize",()=>{if(!act)return;const a=Math.max(screen.width,screen.height),b=Math.min(screen.width,screen.height),w=innerWidth>innerHeight?a:b;
+ if(innerWidth<w*.85)viol("layar terbagi/jendela diperkecil")});
+["contextmenu","copy","cut","dragstart"].forEach(e=>document.addEventListener(e,x=>{if(act)x.preventDefault()}));
+addEventListener("keydown",e=>{if(act&&(e.key=="PrintScreen"||(e.ctrlKey||e.metaKey)&&["p","s","c","u"].includes(e.key.toLowerCase())))e.preventDefault()});
+addEventListener("beforeunload",e=>{if(act){e.preventDefault();e.returnValue=""}});
+addEventListener("online",()=>0);
+let ppT;
+function pop(m,t,ms){const e=$("#pp");clearTimeout(ppT);e.className="on "+(t||"");$("#ppt").textContent=m;if(ms)ppT=setTimeout(()=>e.className="",ms)}
+function popOff(){clearTimeout(ppT);$("#pp").className=""}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function ask(o){popOff();return new Promise(res=>{$("#dgt").textContent=o.t||"Konfirmasi";$("#dgm").textContent=o.m||"";const i=$("#dgi");i.style.display=o.input?"block":"none";i.value="";i.placeholder=o.ph||"";
+ $("#dgy").textContent=o.y||"Ya";$("#dgn").textContent=o.n||"Batal";$("#dgn").style.display=o.n===false?"none":"block";$("#dlg").classList.add("on");
+ const done=v=>{$("#dlg").classList.remove("on");res(v)};
+ $("#dgy").onclick=()=>done(o.input?i.value.trim():true);$("#dgn").onclick=()=>done(o.input?null:false)})}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(b&&!b.disabled&&b.id!=="dgy"&&b.id!=="dgn")pop("Sedang memproses data…","",550)});
+let loads=0;
+function showEarly(){const j=cfg.jadwal.find(x=>x.id==S.id)||{};$("#etx").textContent="Anda mengirim jawaban lebih cepat dari ketentuan (batas: "+(+j.kirimSisa||0)+" menit sebelum waktu ujian berakhir). Minta admin mereset akun Anda, lalu masukkan token dari admin. Kesempatan mengerjakan ulang hanya 1 kali; jika melanggar lagi, ujian dianggap selesai.";
+ $("#eid").textContent=S.nm+" · "+S.kl+" · NISN "+S.ni;$("#ec").value="";$("#early").classList.add("on")}
+$("#eb").onclick=async()=>{const k=$("#ec").value.trim().toUpperCase();pop("Sedang memproses data…");await wait(700);popOff();
+ if(k&&ZK.resetOK(cfg.resetSecret||"SMANPRO",S.ni,S.id,k)){S.early=false;S.rs=1;sv();$("#early").classList.remove("on");const j=cfg.jadwal.find(x=>x.id==S.id);loads=0;$("#fr").src=buildUrl(j.link);return}
+ $("#ec").value="";$("#ec").placeholder="Token salah. Minta ke admin"};
+$("#fr").addEventListener("load",()=>{if(!act||!S)return;loads++;const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kirimSisa||0;
+ if(j.formSatu&&N>0&&!S.early&&loads>1&&(S.end-Date.now())/60000>N){
+  if(S.rs>=1){finish("Ujian dianggap selesai","Anda mengirim jawaban lebih cepat dari ketentuan untuk kedua kalinya. Kesempatan mengerjakan ulang sudah terpakai, sehingga ujian dinyatakan selesai.");return}
+  S.early=true;sv();showEarly()}});
+const DJ="Asesmen Sumatif Akhir Semester Ganjil",DJ2="Tahun Ajaran 2026/2027",DA="Jl. A. Yani - Pronojiwo";
+let SL=[],lg="";
+function titles(c){let a=c.judul||DJ,b=c.judul2;if(b===undefined){const i=a.indexOf("Tahun Ajaran");if(i>0){b=a.slice(i);a=a.slice(0,i).trim()}else b=DJ2}return[a,b]}
+function applyText(){const[a,b]=titles(cfg),h=$("#lt");h.textContent=a;if(b)h.append(document.createElement("br"),b);$("#lp").textContent="SMA Negeri 1 Pronojiwo · "+(cfg.alamat||DA);
+ const D=ZK.DEF;$("#lbm").textContent=cfg.labelPilih||D.labelPilih;$("#go").textContent=cfg.tombol||D.tombol;$("#pjt").textContent=cfg.petunjukJudul||D.petunjukJudul;
+ $("#pjl").innerHTML=(cfg.petunjuk&&cfg.petunjuk.length?cfg.petunjuk:D.petunjuk).map(t=>"<li>"+esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")+"</li>").join("")}
+async function loadSiswa(){const hasApi=typeof API_URL!=="undefined"&&API_URL;
+ if(APID&&APID.cfg&&APID.cfg.saved&&APID.siswa&&APID.siswa.length)SL=APID.siswa;
+ else if(hasApi&&!APID&&J("siswaCache"))SL=J("siswaCache");
+ else{try{const r=await fetch("siswa.json?"+Date.now(),{cache:"no-store"});SL=await r.json()}catch(e){SL=J("siswaCache")||[]}}
+ localStorage.siswaCache=JSON.stringify(SL);
+ $("#ni").readOnly=SL.length>0;$("#ni").placeholder=SL.length?"Terisi otomatis":"";$("#kl").disabled=SL.length>0;$("#kl").options[0].textContent=SL.length?"Terisi otomatis":"Pilih kelas"}
+(function(){const k=$("#kl");[["X",6],["XI",5],["XII",6]].forEach(([t,n])=>{const g=document.createElement("optgroup");g.label="Kelas "+t;for(let i=1;i<=n;i++){const o=document.createElement("option");o.value=o.textContent=t+"-"+i;g.append(o)}k.append(g)})})();
+function showSg(){const q=$("#nm").value.trim(),b=$("#sg");if(q.length<3||!SL.length){b.style.display="none";return}
+ const r=SL.map((x,i)=>[x,i]).filter(a=>a[0].n.includes(q)).slice(0,8);
+ b.innerHTML=r.map(a=>`<div data-i="${a[1]}">${esc(a[0].n)} <small>· ${esc(a[0].k)}</small></div>`).join("")||'<div><small>Nama tidak ditemukan, periksa ejaan</small></div>';b.style.display="block"}
+$("#nm").addEventListener("input",()=>{const e=$("#nm");e.value=e.value.toUpperCase();if(SL.length){$("#kl").value="";$("#ni").value="";renderList()}showSg()});
+$("#kl").addEventListener("change",renderList);
+$("#sg").addEventListener("pointerdown",e=>{const d=e.target.closest("[data-i]");if(!d)return;e.preventDefault();const x=SL[d.dataset.i];$("#nm").value=x.n;$("#kl").value=x.k;$("#ni").value=x.i||"";$("#sg").style.display="none";renderList()});
+document.addEventListener("pointerdown",e=>{if(!e.target.closest("#sg,#nm"))$("#sg").style.display="none"});
+// sembunyikan banner/pop-up yang disisipkan layanan hosting
+new MutationObserver(m=>m.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType==1&&n.tagName!="SCRIPT"&&(n.parentNode==document.body||n.parentNode==document.documentElement)&&/netlify/i.test((n.outerHTML||"").slice(0,3000)))n.remove()}))).observe(document.documentElement,{childList:true,subtree:true});
+
+boot();
+</script></body></html>

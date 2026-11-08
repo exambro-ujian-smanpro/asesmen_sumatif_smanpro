@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0a2551"><title>Panel Admin – Exambro SMANPro</title>
+<style>
+:root{--navy:#0a2551;--deep:#0f4aa3;--blue:#1b7fe3;--sky:#38a8ff;--gold:#ffd200;--green:#14a44d;--red:#e0364a;--ink:#10223d;--mut:#5b6b85;--bg:#eaf3ff}
+*{box-sizing:border-box;margin:0}body{font:14.5px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+#lg{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a2551,#1b7fe3);padding:16px}
+.lb{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:360px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.lb h1{font-size:20px;color:var(--navy);margin-top:6px}.lb p{color:var(--mut);font-size:12.5px;margin-bottom:8px}.lb label{text-align:left}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 3px;font-weight:600}
+input,select,textarea{width:100%;padding:10px;border:1.5px solid #c3d6ee;border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+textarea{font:12.5px ui-monospace,monospace}input:focus,select:focus,textarea:focus{outline:3px solid #a9d3ff;border-color:var(--blue)}
+.bt{display:inline-block;margin-top:12px;padding:10px 16px;border:0;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;transition:filter .15s}.bt:hover{filter:brightness(1.12)}
+.bt.g{background:var(--green)}.bt.r{background:var(--red);margin-left:8px;padding:6px 10px;margin-top:6px}.bt.o{background:#e3edf9;color:var(--navy)}.lb .bt{width:100%}
+.er{color:var(--red);font-size:13px;margin-top:8px}
+#app{display:none;min-height:100vh}
+#sb{width:232px;flex:none;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#0a2551 0%,#0f4aa3 100%);color:#fff;transition:margin-left .25s;z-index:50}
+.sbh{display:flex;align-items:center;gap:10px;padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.15)}.sbh img{height:40px}.sbh b{font-size:15px;line-height:1.2}
+#nv{padding:10px 0;flex:1}#nv button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:13px 18px;border:0;background:0;color:#cfe6ff;font:inherit;font-weight:600;border-left:4px solid transparent}
+#nv button:hover{background:rgba(255,255,255,.1);color:#fff}#nv button.on{background:rgba(56,168,255,.25);color:#fff;border-left-color:var(--gold)}
+.sbf{padding:12px 16px;font-size:11.5px;color:#9cc4f3}
+#app.hide #sb{margin-left:-232px}#sbk{display:none}
+#mn{flex:1;min-width:0}#top{position:sticky;top:0;z-index:20;box-shadow:0 3px 10px rgba(10,37,81,.25)}
+header{display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,#1260c4,#2b95ec);color:#fff;padding:9px 16px;border-bottom:3px solid var(--gold)}
+header b{font-size:17px}.fx{flex:1}#tg{width:40px;height:40px;border:0;border-radius:8px;background:rgba(255,255,255,.18);color:#fff;font-size:20px}#tg:hover,#ab:hover{background:rgba(255,255,255,.3)}
+.acc{position:relative}#ab{width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.75);background:rgba(255,255,255,.18);font-size:21px}
+#am{display:none;position:absolute;right:0;top:calc(100% + 10px);background:#fff;color:var(--ink);border-radius:10px;box-shadow:0 8px 26px rgba(5,20,50,.35);min-width:210px;overflow:hidden;z-index:60}#am.on{display:block}
+.an{padding:12px 14px;border-bottom:1px solid #e3ebf6}.an b{font-size:14px;color:var(--navy);display:block}#am button{width:100%;text-align:left;padding:12px 14px;border:0;background:0;font:inherit;color:#c0243a;font-weight:700}#am button:hover{background:#fdecef}
+.wn{display:none;background:#fff3cd;color:#664d03;padding:10px 16px;font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px;background:#dcecff;font-size:12.5px;align-items:center;border-bottom:1px solid #c3d6ee}
+.bar button{padding:8px 12px;border:0;border-radius:7px;background:var(--navy);color:#fff;font:inherit;font-weight:600}.bar button:hover{filter:brightness(1.2)}.bar button.sv{background:var(--green);padding:10px 28px;font-size:15px}#st{font-weight:600;color:var(--deep)}
+main{padding:16px;max-width:880px;width:100%;margin:0 auto}.tab{display:none}
+.c{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(15,74,163,.12);border-top:3px solid var(--sky)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}small{display:block;margin-top:3px;color:var(--mut)}
+.tk{font:700 36px ui-monospace,Menlo,monospace;letter-spacing:6px;color:var(--deep);text-align:center;margin:8px 0}
+.ck{display:flex;gap:8px;align-items:center;margin-top:12px}.ck input{width:auto}
+button,select,.bt,input[type=checkbox],nav button,a{cursor:pointer}button:disabled{cursor:not-allowed}
+#pp{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:90;background:rgba(10,37,81,.96);color:#ffe066;padding:16px 22px;border-radius:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);align-items:center;gap:12px;max-width:86vw}
+#pp.on{display:flex}#pp.ok{color:#7dffb0}#pp.er{color:#ff9aa5}
+.sp{width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top-color:#ffe066;border-radius:50%;animation:spin .8s linear infinite;flex:none}#pp.ok .sp,#pp.er .sp{display:none}@keyframes spin{to{transform:rotate(360deg)}}
+#dlgb{display:none;position:fixed;inset:0;z-index:80;background:rgba(5,20,50,.65);align-items:center;justify-content:center;padding:16px}#dlgb.on{display:flex}
+.dg{background:#fff;border-radius:14px;padding:20px;width:100%;max-width:340px}.dg h3{color:var(--navy);margin-bottom:6px}.dgb{display:flex;gap:8px}.dgb .bt{flex:1}
+.gh{margin:20px 0 8px;color:var(--navy);font-size:16px}.gh small{display:inline;margin-left:6px}.ph{margin-bottom:10px;color:var(--navy);font-size:19px}.ph small{display:inline;font-size:13px;font-weight:400}
+.tb{border:1.5px solid #c3d6ee;border-radius:10px;padding:8px 12px 12px;background:#f5faff}.tb b{color:var(--navy)}
+.kp{border:1.5px solid #c3d6ee;border-radius:10px;padding:6px 12px;background:#f5faff}.kr{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:6px 0;border-bottom:1px dashed #d4e2f3}.kr:last-child{border:0}
+.kr label{display:inline-flex;gap:5px;align-items:center;margin:0;font-weight:500;color:var(--ink)}.kr .kg{font-weight:800;color:var(--navy);min-width:128px}.kr input{width:auto}.kr span{display:flex;flex-wrap:wrap;gap:4px 12px}
+.ak{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;align-items:center}.ak label{display:inline-flex;gap:5px;align-items:center;margin:0;font-weight:500;color:var(--ink)}.ak input{width:auto}
+.rbd{font-size:11px;font-weight:800;letter-spacing:.6px;padding:3px 10px;border-radius:20px;background:var(--gold);color:var(--navy);white-space:nowrap}.dg p{white-space:pre-line}
+#app.pm #sb{background:linear-gradient(180deg,#073b42 0%,#0e7c84 100%)}#app.pm header{background:linear-gradient(90deg,#0a6068,#16a2a8)}#app.pm .c{border-top-color:#16a2a8}#app.pm .bar{background:#d7f1f2}
+#app.pm #nv button.on{background:rgba(22,162,168,.35)}#app.pm .bt{background:#0e8c93}#app.pm .bt.g{background:var(--green)}#app.pm .bt.r{background:var(--red)}#app.pm .bt.o{background:#dcf1f2;color:#073b42}#app.pm .rbd{background:#fff;color:#0b6b73}
+@media(max-width:760px){#sb{position:fixed;left:0;top:0;margin-left:-232px}#app.open #sb{margin-left:0}#app.open #sbk{display:block;position:fixed;inset:0;background:rgba(5,20,50,.5);z-index:40}.g3{grid-template-columns:1fr}}
+</style></head><body>
+<section id="lg"><div class="lb"><img src="logo.png" width="64" height="80" alt=""><h1 id="ah">Panel Admin</h1><p id="as">Exambro SMANPro · SMA Negeri 1 Pronojiwo</p>
+<label>Nama pengguna</label><input id="lu" autocomplete="username" autocapitalize="none"><label>Kata sandi</label><input id="lp" type="password" autocomplete="current-password">
+<button class="bt" id="bl">Masuk</button><p class="er" id="le"></p></div></section>
+<section id="app">
+<aside id="sb"><div class="sbh"><img src="logo.png" alt=""><b id="ah2">Panel Admin</b></div><nav id="nv"></nav><div class="sbf">Created by SMAN 1 Pronojiwo</div></aside><div id="sbk"></div>
+<div id="mn"><div id="top">
+<header><button id="tg" title="Sembunyikan / tampilkan menu">☰</button><b id="pg">Jadwal</b><span class="rbd" id="rbg"></span><span class="fx"></span>
+ <div class="acc"><button id="ab" title="Akun">👤</button><div id="am"><div class="an"><b id="me"></b><small id="mr"></small></div><button id="out">⏻ Keluar</button></div></div></header>
+<div class="wn" id="warn">⚠ Kata sandi Anda masih bawaan atau sementara. Segera ganti di menu <b>Admin</b>.</div>
+<div class="bar" id="barA" style="display:none"><button class="sv" id="sv">Simpan</button><span id="st">Belum ada perubahan</span></div>
+<div class="bar" id="barF"><span><b>Mode manual:</b> tombol Simpan otomatis belum aktif (isi alamat Google Apps Script di config.js). Sampai saat itu, unduh file lalu timpa file lama di folder:</span>
+<button id="d1">Unduh jadwal.json</button><button id="d2">Unduh siswa.json</button><button id="d3">Unduh admin.json</button></div>
+</div>
+<main>
+<div class="tab" id="t-Token"><div id="tl"></div></div>
+<div class="tab" id="t-Reset"><h2 class="ph">Reset akun siswa</h2><div class="c"><small style="margin:0">Untuk siswa yang terkunci karena menekan Kirim lebih cepat dari ketentuan jadwal. Pilih kelas, siswa, dan mata pelajaran, lalu klik Reset akun siswa. Kode yang muncul adalah <b>token dari admin</b>. Siswa mendapat <b>1 kali</b> kesempatan mengerjakan ulang; jika melanggar lagi, ujian dianggap selesai.</small>
+<label>Kelas</label><select id="rk"></select><label>Cari nama (boleh dikosongkan)</label><input id="rq" autocomplete="off" style="text-transform:uppercase" placeholder="Ketik sebagian nama">
+<label>Siswa <span id="rcnt"></span></label><select id="rn"></select><label>Mata pelajaran</label><select id="rm"></select>
+<button class="bt" id="rb">Reset akun siswa</button><div class="tk" id="rc"></div><small id="rs"></small></div></div>
+<div class="tab" id="t-Jadwal"><h2 class="ph" id="jh"></h2><div id="jl"></div><button class="bt" id="ad">+ Tambah jadwal</button> <button class="bt o" id="pj">Hapus jadwal yang sudah lewat</button> <button class="bt g sv2">Simpan</button></div>
+<div class="tab" id="t-Siswa"><div class="c"><label>Daftar siswa (satu baris: NAMA,KELAS,NISN — boleh tempel dari Excel)</label><textarea id="sl" rows="14"></textarea><small id="sc"></small></div></div>
+<div class="tab" id="t-Pengaturan"><div class="c" id="ps"><label>Judul panel admin</label><input id="jad"><label>Teks di bawah judul panel admin</label><input id="sad">
+ <label>Judul halaman awal (baris 1)</label><input id="jd"><label>Baris ke-2 (kosongkan jika tidak perlu)</label><input id="jd2">
+ <label>Alamat sekolah</label><input id="al">
+ <label>Nama pilihan di halaman login (contoh: Mata pelajaran / Kegiatan)</label><input id="lbm"><label>Tulisan tombol mulai</label><input id="tbm"><label>Judul petunjuk</label><input id="pjt"><label>Isi petunjuk (satu baris = satu poin; **teks** untuk tebal)</label><textarea id="pjl" rows="9"></textarea><label>Kode pengawas (buka kunci & keluar)</label><input id="kb"><label>Batas pelanggaran sebelum layar terkunci</label><input id="mx" type="number" min="1">
+ <label>Rahasia kode reset (kosong = bawaan; isi acak lebih aman)</label><div class="g2"><input id="rsx"><button class="bt" style="margin:0" id="rsr">Acak</button></div>
+ <div class="ck"><input type="checkbox" id="wi"><span>Wajib pasang aplikasi (PWA) sebelum ujian</span></div><button class="bt g sv2">Simpan</button></div></div>
+<div class="tab" id="t-Admin"><div class="c" id="pwnote"><small style="margin:0">Kata sandi disimpan dalam bentuk terenkripsi sehingga <b>tidak dapat dilihat</b>. Jika admin pembantu lupa kata sandi, klik <b>Reset kata sandi</b>, lalu berikan kata sandi sementara yang muncul kepada yang bersangkutan.</small></div><div id="al2"></div><div class="c" id="addbox"><b>Tambah admin (maksimal 2)</b><br><small id="addinfo"></small>
+ <label>Nama pengguna (huruf kecil/angka)</label><input id="au" autocapitalize="none"><label>Nama lengkap</label><input id="an"><label>Kata sandi (min. 6 karakter)</label><input id="ap" type="password"><label>Akses jenjang (boleh lebih dari satu)</label><div class="ak"><label><input type="checkbox" class="na" value="X"> Kelas X</label><label><input type="checkbox" class="na" value="XI"> Kelas XI</label><label><input type="checkbox" class="na" value="XII"> Kelas XII</label></div><small>Jenjang yang dipilih menentukan jadwal yang boleh diatur admin ini. Dapat diubah kapan saja di daftar admin di atas.</small>
+<button class="bt g" id="aa">Tambah</button></div>
+ <div class="c"><b>Ganti kata sandi saya</b><label>Kata sandi lama</label><input id="op" type="password"><label>Kata sandi baru (min. 6 karakter)</label><input id="np" type="password"><button class="bt" id="cp">Simpan kata sandi</button></div></div>
+</main></div></section>
+<div id="dlgb"><div class="dg"><h3 id="dgt"></h3><p id="dgm"></p><div class="dgb"><button class="bt o" id="dgn">Batal</button><button class="bt g" id="dgy">Ya</button></div></div></div>
+<div id="pp"><div class="sp"></div><span id="ppt"></span></div>
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const DJ="Asesmen Sumatif Akhir Semester Ganjil",DJ2="Tahun Ajaran 2026/2027",DA="Jl. A. Yani - Pronojiwo";
+const rnd=n=>[...crypto.getRandomValues(new Uint8Array(n))].map(x=>ZK.AL[x%32]).join("");
+const sha=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+const hp=(s,p)=>sha(s+":"+p),mmss=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+const get=async(f,d)=>{try{const r=await fetch(f+"?"+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;return await r.json()}catch(e){return d}};
+function titles(c){let a=c.judul||DJ,b=c.judul2;if(b===undefined){const i=a.indexOf("Tahun Ajaran");if(i>0){b=a.slice(i);a=a.slice(0,i).trim()}else b=DJ2}return[a,b]}
+const dl=(o,n)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:"application/json"}));a.download=n;a.click()};
+const API=typeof API_URL!=="undefined"&&API_URL;let TOK=sessionStorage.tok||"",dirty=false;
+let ppT;
+function pop(m,t,ms){const e=$("#pp");clearTimeout(ppT);e.className="on "+(t||"");$("#ppt").textContent=m;if(ms)ppT=setTimeout(()=>e.className="",ms)}
+function popOff(){clearTimeout(ppT);$("#pp").className=""}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const APIpub=async()=>{let c=null;if(API){try{const r=await fetch(API+"?t="+Date.now(),{cache:"no-store"});const d=await r.json();if(d.cfg&&d.cfg.saved)c=d.cfg}catch(e){}}return c||await get("jadwal.json",null)};
+function adminText(c){const D=ZK.DEF,a=(c&&c.judulAdmin)||D.judulAdmin,b=(c&&c.subAdmin)||D.subAdmin;$("#ah").textContent=a;$("#ah2").textContent=a;$("#as").textContent=b;document.title=a+" – "+b.split("·")[0].trim()}
+function dlg(o){popOff();return new Promise(res=>{$("#dgt").textContent=o.t;$("#dgm").textContent=o.m;$("#dgy").textContent=o.y||"Ya";$("#dgn").textContent=o.n||"Batal";$("#dgn").style.display=o.n===false?"none":"block";$("#dlgb").classList.add("on");
+ const d=v=>{$("#dlgb").classList.remove("on");res(v)};$("#dgy").onclick=()=>d(true);$("#dgn").onclick=()=>d(false)})}
+let CF,SL,AD,ME,tab="Jadwal";let VER=0,DEL=[];
+const IC={Jadwal:"📅",Token:"🔑",Reset:"🔄",Siswa:"👥",Pengaturan:"⚙️",Admin:"🛡️"},T=["Jadwal","Token","Reset","Siswa","Pengaturan","Admin"],RS=()=>CF.resetSecret||"SMANPRO";
+const nameOf=u=>(AD.admins.find(a=>a.u==u)||{}).n||u||"",isPast=j=>j.selesai&&+new Date(j.selesai)<Date.now();
+const akses=()=>ME.r=="utama"?["X","XI","XII"]:(ME.akses||[]),allowedK=()=>ALLK.filter(x=>akses().includes(x.split("-")[0]));
+const kls=j=>{if(!Array.isArray(j.kelasList))j.kelasList=parseKelas(j.kelas);return j.kelasList};
+const inScope=j=>{const l=kls(j),a=allowedK();return l.length>0&&l.every(x=>a.includes(x))};
+const vis=j=>ME.r=="utama"||kls(j).length==0||inScope(j);
+const aksesLabel=()=>akses().length==3?"Semua kelas":akses().map(g=>"Kelas "+g).join(", ")||"belum ada akses";
+function setBadge(){const U=ME.r=="utama";$("#rbg").textContent=U?"ADMIN UTAMA":(ME.n||"ADMIN").toUpperCase()+" · "+aksesLabel().toUpperCase();$("#mr").textContent=U?"Admin utama · semua jenjang":"@"+ME.u+" · Akses: "+aksesLabel()}
+function jenjangOf(j){const s=new Set(kls(j).map(x=>x.split("-")[0]));return s.size==0?"Kosong":s.size==1?[...s][0]:"Lintas"}
+function groups(L){const m={};L.forEach(x=>{const k=jenjangOf(x[0]);(m[k]=m[k]||[]).push(x)});return["X","XI","XII","Lintas","Kosong"].filter(k=>m[k]).map(k=>[k,m[k]])}
+const gName=k=>k=="Lintas"?"Lintas jenjang / beberapa jenjang":k=="Kosong"?"Belum memilih kelas":"Kelas "+k;
+const pjs=k=>["Admin utama"].concat(k=="Lintas"||k=="Kosong"?[]:AD.admins.filter(a=>a.r!="utama"&&(a.jenjang||[]).includes(k)).map(a=>a.n)).join(", ");
+// ---- masuk ----
+$("#bl").onclick=async()=>{const u=$("#lu").value.trim().toLowerCase();
+ if(API){$("#le").textContent="Memeriksa…";const r=await post({a:"login",u,p:$("#lp").value});if(!r.ok)return $("#le").textContent=r.err;
+  TOK=r.tok;ME={u:r.u,n:r.n,r:r.r,defpw:r.defpw,akses:r.akses||[]};sessionStorage.tok=TOK;sessionStorage.me=JSON.stringify(ME);
+  try{await loadApi()}catch(e){return $("#le").textContent=String(e)}return start(ME)}
+ if(!crypto.subtle)return $("#le").textContent="Buka lewat alamat https:// agar login dapat dipakai.";
+ const a=AD&&AD.admins.find(x=>x.u==u);
+ if(!a||await hp(a.s,$("#lp").value)!==a.h)return $("#le").textContent="Nama pengguna atau kata sandi salah.";sessionStorage.adm=u;start(a)};
+$("#lp").addEventListener("keydown",e=>{if(e.key=="Enter")$("#bl").click()});
+$("#ab").onclick=e=>{e.stopPropagation();$("#am").classList.toggle("on")};
+document.addEventListener("click",e=>{if(!e.target.closest(".acc"))$("#am").classList.remove("on")});
+$("#out").onclick=async()=>{$("#am").classList.remove("on");if(await dlg({t:"Keluar dari panel admin?",m:"Apakah Anda yakin ingin keluar dari laman admin?",y:"Ya, keluar",n:"Batal"})){pop("Sedang memproses data…");await wait(600);sessionStorage.clear();location.reload()}};
+$("#tg").onclick=()=>{const a=$("#app");if(innerWidth<=760)a.classList.toggle("open");else a.classList.toggle("hide")};$("#sbk").onclick=()=>$("#app").classList.remove("open");
+async function start(a){ME=a;if(!ME.akses)ME.akses=a.jenjang||[];$("#lg").style.display="none";$("#app").style.display="flex";
+ $("#me").textContent=a.n;$("#app").classList.toggle("pm",a.r!="utama");setBadge();$("#warn").style.display=(API?a.defpw:(await hp(a.s,"admin123"))===a.h||a.tmp===1)?"block":"none";$("#barF").style.display=API?"none":"flex";$("#barA").style.display=API?"flex":"none";
+ $("#nv").innerHTML=(a.r=="utama"?T:["Jadwal","Token","Reset","Admin"]).map(t=>`<button data-t="${t}"><span>${IC[t]}</span>${t}</button>`).join("");showTab("Jadwal")}
+$("#nv").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.t){showTab(b.dataset.t);$("#app").classList.remove("open")}};
+function renderTab(){({Token:rToken,Reset:rReset,Jadwal:rJadwal,Siswa:rSiswa,Pengaturan:rSet,Admin:rAdm})[tab]()}
+function showTab(t){tab=t;$("#pg").textContent=IC[t]+" "+t;$$("#nv button").forEach(b=>b.classList.toggle("on",b.dataset.t==t));$$(".tab").forEach(d=>d.style.display=d.id=="t-"+t?"block":"none");
+ pop("Sedang memproses data…");setTimeout(()=>{renderTab();popOff()},350)}
+// ---- token & reset ----
+function rToken(){const n=Date.now(),U=ME.r=="utama",L=CF.jadwal.map((j,i)=>[j,i]).filter(x=>x[0].mapel&&vis(x[0]));
+ const card=j=>{let tk="—",sb="Tanpa token";
+  if(j.tokenAuto&&j.tokenSecret){const m=(+j.tokenMenit||15)*6e4;tk=ZK.token(j.tokenSecret,+j.tokenMenit||15,n);sb="Berganti otomatis dalam "+mmss(((Math.floor(n/m)+1)*m-n)/1000)}
+  else if(j.token){tk=j.token;sb="Token tetap"}
+  return `<div class="c"><b>${esc(j.mapel)}</b> <small style="display:inline">${esc(j.kelas||"")}</small><div class="tk">${esc(tk)}</div><small>${sb}</small></div>`};
+ $("#tl").innerHTML=(U?groups(L).map(g=>`<h3 class="gh">🔑 Token ${esc(gName(g[0]))} <small>${g[1].length} jadwal · ${esc(pjs(g[0]))}</small></h3>`+g[1].map(x=>card(x[0])).join("")).join(""):`<h2 class="ph">Token jadwal saya — ${esc(aksesLabel())}</h2>`+L.map(x=>card(x[0])).join(""))||'<div class="c">Belum ada jadwal. Tambahkan di menu Jadwal.</div>'}
+setInterval(()=>{if(ME&&tab=="Token")rToken()},1000);
+const KG=[["X",6],["XI",5],["XII",6]],ALLK=[].concat(...[["X",6],["XI",5],["XII",6]].map(([g,n])=>Array.from({length:n},(_,k)=>g+"-"+(k+1)))),allJ=()=>{const m=new Map();(CF.semua||[]).forEach(j=>m.set(j.id,j));CF.jadwal.filter(j=>j.mapel).forEach(j=>m.set(j.id,{id:j.id,mapel:j.mapel,kelas:j.kelas,kelasList:kls(j)}));const a=allowedK();return[...m.values()].filter(j=>!DEL.includes(j.id)&&(ME.r=="utama"||(Array.isArray(j.kelasList)?j.kelasList:parseKelas(j.kelas)).some(k=>a.includes(k))))};
+function kOpts(sel,reset){let h=`<option value="${reset?"*":"Semua kelas"}">${ME.r=="utama"?"Semua kelas":"Semua kelas yang saya kelola"}</option>`;
+ KG.filter(x=>akses().includes(x[0])).forEach(([g,n])=>{h+=`<optgroup label="Kelas ${g}"><option value="${reset?g+"*":"Semua kelas "+g}">Semua kelas ${g}</option>`;for(let i=1;i<=n;i++)h+=`<option value="${g}-${i}">${g}-${i}</option>`;h+="</optgroup>"});
+ if(sel&&h.includes(`value="${sel}"`))return h.replace(`value="${sel}"`,`value="${sel}" selected`);
+ if(sel&&!reset){const lo=sel.toLowerCase();const m=h.match(/value="([^"]*)"/g).map(x=>x.slice(7,-1)).find(x=>x.toLowerCase()==lo);if(m)return h.replace(`value="${m}"`,`value="${m}" selected`);return `<option value="${esc(sel)}" selected>${esc(sel)}</option>`+h}return h}
+function kelasLabel(L){if(!L.length)return"";if(L.length==ALLK.length)return"Semua kelas";const o=[];KG.forEach(([g,n])=>{const m=L.filter(x=>x.startsWith(g+"-"));if(m.length==n)o.push("Semua kelas "+g);else o.push(...m)});return o.join(", ")}
+function parseKelas(t){t=String(t||"").trim();if(!t||/^semua kelas$/i.test(t))return[...ALLK];const s=new Set();t.split(/[,;]\s*/).forEach(p=>{p=p.trim().toUpperCase();const m=p.match(/^SEMUA KELAS (XII|XI|X)$/);if(m)ALLK.filter(x=>x.startsWith(m[1]+"-")).forEach(x=>s.add(x));else if(ALLK.includes(p))s.add(p)});return[...s]}
+function kp(j,i){return`<div class="kp">`+KG.filter(x=>akses().includes(x[0])).map(([g,n])=>{const all=ALLK.filter(x=>x.startsWith(g+"-"));return`<div class="kr"><label class="kg"><input type="checkbox" data-i="${i}" data-kg="${g}"${all.every(x=>j.kelasList.includes(x))?" checked":""}> Semua kelas ${g}</label><span>${all.map(x=>`<label><input type="checkbox" data-i="${i}" data-kc="${x}"${j.kelasList.includes(x)?" checked":""}> ${x}</label>`).join("")}</span></div>`}).join("")+`</div>`}
+function toggleKelas(i,kind,val,on){const j=CF.jadwal[i],set=new Set(j.kelasList||[]);
+ if(kind=="g"){ALLK.filter(x=>x.startsWith(val+"-")).forEach(x=>on?set.add(x):set.delete(x))}else on?set.add(val):set.delete(val);
+ j.kelasList=ALLK.filter(x=>set.has(x));j.kelas=kelasLabel(j.kelasList);
+ document.querySelectorAll(`[data-i="${i}"][data-kc]`).forEach(c=>c.checked=j.kelasList.includes(c.dataset.kc));
+ document.querySelectorAll(`[data-i="${i}"][data-kg]`).forEach(c=>c.checked=ALLK.filter(x=>x.startsWith(c.dataset.kg+"-")).every(x=>j.kelasList.includes(x)));
+ const e=document.querySelector("#kt"+i);if(e)e.textContent=j.kelas||"belum ada";mark()}
+const kcls=v=>v=="*"||!v?()=>true:v.endsWith("*")?(k=>k.startsWith(v.slice(0,-1)+"-")):(k=>k==v);
+function rReset(){$("#rk").innerHTML=kOpts("",true);$("#rm").innerHTML=allJ().map(j=>`<option value="${esc(j.id)}">${esc(j.mapel)}${j.kelas?" ("+esc(j.kelas)+")":""}</option>`).join("")||'<option value="">Belum ada jadwal</option>';fillSiswa()}
+function fillSiswa(){const f=kcls($("#rk").value),q=($("#rq").value||"").trim().toUpperCase(),L=SL.map((x,i)=>[x,i]).filter(a=>f(a[0].k)&&allowedK().includes(a[0].k)&&(!q||a[0].n.includes(q))).sort((a,b)=>a[0].n.localeCompare(b[0].n));
+ $("#rn").innerHTML=L.length?L.slice(0,400).map(a=>`<option value="${a[1]}">${esc(a[0].n)} (${esc(a[0].k)})</option>`).join(""):'<option value="">Tidak ada siswa</option>';$("#rcnt").textContent="("+L.length+")"}
+$("#rk").addEventListener("change",fillSiswa);$("#rq").addEventListener("input",fillSiswa);
+$("#rb").onclick=()=>{pop("Sedang memproses data…","",500);const v=$("#rn").value,x=v===""?null:SL[+v],j=allJ().find(y=>y.id==$("#rm").value);
+ if(!x||!j){$("#rc").textContent="";return $("#rs").textContent="Pilih siswa dan mata pelajaran terlebih dahulu."}
+ $("#rc").textContent=ZK.reset(RS(),x.i,j.id);$("#rs").textContent=x.n+" · "+x.k+" · NISN "+x.i+" — berikan kode ini kepada siswa (berlaku sekitar 10–20 menit, kesempatan ulang 1x)"};
+// ---- jadwal ----
+function jcard(j,i){const d=`data-i="${i}" data-k`,U=ME.r=="utama";["mulai","selesai"].forEach(f=>{if(!Array.isArray(j.kelasList))j.kelasList=parseKelas(j.kelas);if(j[f+"T"]===undefined){j[f+"T"]=(j[f]||"").slice(0,10);j[f+"J"]=(j[f]||"").slice(11,16)}});
+ return `<div class="c">
+<label>Mata pelajaran</label><input ${d}="mapel" value="${esc(j.mapel)}"><label>Kelas peserta (boleh lebih dari satu)</label>${kp(j,i)}<small>Terpilih: <b id="kt${i}">${esc(j.kelas||"belum ada")}</b></small>
+<label>Link Google Formulir (boleh link terisi otomatis)</label><input ${d}="link" value="${esc(j.link)}">
+<div class="g2"><div class="tb"><b>🟢 Waktu mulai</b><label>Tanggal</label><input type="date" ${d}="mulaiT" value="${esc(j.mulaiT)}"><label>Jam</label><input type="time" ${d}="mulaiJ" value="${esc(j.mulaiJ)}"></div><div class="tb"><b>🔴 Waktu selesai</b><label>Tanggal</label><input type="date" ${d}="selesaiT" value="${esc(j.selesaiT)}"><label>Jam</label><input type="time" ${d}="selesaiJ" value="${esc(j.selesaiJ)}"></div></div>
+<div class="g2"><div><label>Durasi ujian (menit)</label><input type="number" ${d}="durasi" value="${esc(j.durasi)}"></div><div><label>Kirim paling cepat (menit sebelum waktu habis)</label><input type="number" ${d}="kirimSisa" value="${esc(j.kirimSisa||0)}"></div></div>
+<small>Menentukan kapan siswa boleh menekan Selesai tanpa kode pengawas. Isi 0 jika tidak dibatasi.</small>
+<div class="ck"><input type="checkbox" ${d}="formSatu"${j.formSatu?" checked":""}><span>Formulir hanya <b>1 halaman</b> (tanpa tombol Berikutnya / Kembali)</span></div>
+<small>Centang <b>hanya</b> jika formulir benar-benar 1 halaman. Maka siswa yang menekan Kirim sebelum batas di atas akan terkunci dan harus meminta <b>kode reset</b> dari admin. Jika formulir punya tombol Berikutnya/Kembali, <b>jangan dicentang</b>, karena aplikasi tidak bisa membedakannya dari tombol Kirim.</small>
+<div class="g2"><div><label>Mode token</label><select ${d}="tokenAuto"><option value="0">Token tetap</option><option value="1"${j.tokenAuto?" selected":""}>Berganti otomatis</option></select></div>
+<div><label>Ganti tiap (menit)</label><input type="number" min="1" ${d}="tokenMenit" value="${esc(j.tokenMenit||15)}" ${j.tokenAuto?"":"disabled"}></div></div>
+${j.tokenAuto?`<small>Token otomatis tampil di menu <b>Token</b>.</small>`:`<div class="g2"><input ${d}="token" value="${esc(j.token||"")}" placeholder="Token (kosong = tanpa token)"><button class="bt" style="margin:0" onclick="gen(${i})">Generate</button></div>`}
+<button class="bt r" style="margin-left:0" onclick="delJ(${i})">Hapus jadwal</button> <button class="bt o" style="margin-top:6px" onclick="dupJ(${i})">Duplikat (+1 hari)</button></div>`}
+function rJadwal(){const U=ME.r=="utama",L=CF.jadwal.map((j,i)=>[j,i]).filter(x=>vis(x[0])),past=L.filter(x=>isPast(x[0])).length;
+ $("#jh").innerHTML=(U?"Semua jadwal":"Jadwal saya — "+esc(aksesLabel()))+` <small>${L.length} jadwal</small>`;
+ if(!U&&!akses().length){$("#jl").innerHTML='<div class="c">⚠ Anda belum diberi akses jenjang. Hubungi admin utama.</div>';$("#ad").style.display="none";$("#pj").style.display="none";return}
+ $("#ad").style.display="inline-block";$("#pj").textContent="Hapus jadwal yang sudah lewat ("+past+")";$("#pj").style.display=past?"inline-block":"none";
+ $("#jl").innerHTML=(U?groups(L).map(g=>`<h3 class="gh">👥 ${esc(gName(g[0]))} <small>${g[1].length} jadwal · ${esc(pjs(g[0]))}</small></h3>`+g[1].map(x=>jcard(x[0],x[1])).join("")).join(""):L.map(x=>jcard(x[0],x[1])).join(""))||'<div class="c">Belum ada jadwal.</div>'}
+$("#jl").addEventListener("input",e=>{const t=e.target,i=t.dataset.i,k=t.dataset.k;if(i==null||!k||k=="tokenAuto")return;const jj=CF.jadwal[i];
+ if(k=="formSatu"){jj.formSatu=t.checked;return}
+ if(/^(mulai|selesai)[TJ]$/.test(k)){jj[k]=t.value;if(k=="mulaiT"&&!jj.selesaiT){jj.selesaiT=t.value;const o=document.querySelector(`[data-i="${i}"][data-k="selesaiT"]`);if(o)o.value=t.value}
+  const f=k.replace(/[TJ]$/,"");jj[f]=(jj[f+"T"]&&jj[f+"J"])?jj[f+"T"]+"T"+jj[f+"J"]:"";return}
+ CF.jadwal[i][k]=["durasi","kirimSisa","tokenMenit"].includes(k)?+t.value:t.value});
+$("#jl").addEventListener("change",e=>{const t=e.target;if(t.dataset.kc||t.dataset.kg){toggleKelas(+t.dataset.i,t.dataset.kg?"g":"c",t.dataset.kg||t.dataset.kc,t.checked);return}if(t.dataset.k=="owner"){rJadwal();return}if(t.dataset.k=="tokenAuto"){const j=CF.jadwal[t.dataset.i];j.tokenAuto=t.value=="1";if(j.tokenAuto){j.tokenSecret=j.tokenSecret||rnd(12);j.tokenMenit=j.tokenMenit||15}rJadwal()}});
+async function delJ(i){if(await dlg({t:"Hapus jadwal?",m:"Jadwal ini akan dihapus dari daftar.",y:"Ya, hapus"})){DEL.push(CF.jadwal[i].id);CF.jadwal.splice(i,1);mark();rJadwal()}}
+function dupJ(i){const j=JSON.parse(JSON.stringify(CF.jadwal[i])),p=n=>String(n).padStart(2,"0"),sh=v=>{const t=+new Date(v);if(!v||isNaN(t))return v;const d=new Date(t+864e5);return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes())};
+ j.id="u"+Date.now()+rnd(4);j.owner=ME.u;j.mapel=j.mapel+" (salinan)";j.mulai=sh(j.mulai);j.selesai=sh(j.selesai);j.mulaiT=(j.mulai||"").slice(0,10);j.mulaiJ=(j.mulai||"").slice(11,16);j.selesaiT=(j.selesai||"").slice(0,10);j.selesaiJ=(j.selesai||"").slice(11,16);if(j.tokenAuto)j.tokenSecret=rnd(12);else if(j.token)j.token=rnd(6);
+ CF.jadwal.splice(i+1,0,j);mark();rJadwal();pop("Jadwal diduplikat ke hari berikutnya ✓","ok",2200)}
+$("#pj").onclick=async()=>{const ids=CF.jadwal.filter(j=>vis(j)&&isPast(j)).map(j=>j.id);if(!ids.length)return;
+ if(await dlg({t:"Hapus jadwal yang sudah lewat?",m:ids.length+" jadwal yang waktu selesainya sudah lewat akan dihapus dari daftar.",y:"Ya, hapus"})){DEL.push(...ids);CF.jadwal=CF.jadwal.filter(j=>!ids.includes(j.id));mark();rJadwal()}};
+function gen(i){CF.jadwal[i].token=rnd(6);mark();rJadwal()}
+$("#ad").onclick=()=>{CF.jadwal.push({id:"u"+Date.now()+rnd(4),owner:ME.u,mapel:"",kelas:"",kelasList:[],formSatu:false,link:"",mulai:"",selesai:"",mulaiT:"",mulaiJ:"",selesaiT:"",selesaiJ:"",durasi:90,kirimSisa:5,halaman:1,token:"",tokenAuto:false,tokenMenit:15,tokenSecret:""});mark();rJadwal()};
+// ---- siswa ----
+const parseSL=()=>$("#sl").value.split(/\n/).map(l=>l.split(/[,;\t]/).map(x=>x.trim())).filter(a=>a[0]).map(a=>({n:a[0].toUpperCase(),k:(a[1]||"").toUpperCase().replace(/\s+/g,"-"),i:a[2]||""}));
+function rSiswa(){$("#sl").value=SL.map(x=>[x.n,x.k,x.i].join(",")).join("\n");$("#sc").textContent=SL.length+" siswa"}
+$("#sl").addEventListener("input",()=>{SL=parseSL();$("#sc").textContent=SL.length+" siswa"});
+// ---- pengaturan ----
+function rSet(){const t=titles(CF);$("#jd").value=t[0];$("#jd2").value=t[1]||"";$("#al").value=CF.alamat||DA;$("#kb").value=CF.kodeBuka||"4321";$("#mx").value=CF.maksPelanggaran||1;$("#wi").checked=CF.wajibInstal!==false;$("#rsx").value=CF.resetSecret||"";$("#jad").value=CF.judulAdmin||ZK.DEF.judulAdmin;$("#sad").value=CF.subAdmin||ZK.DEF.subAdmin;const D=ZK.DEF;$("#lbm").value=CF.labelPilih||D.labelPilih;$("#tbm").value=CF.tombol||D.tombol;$("#pjt").value=CF.petunjukJudul||D.petunjukJudul;$("#pjl").value=(CF.petunjuk&&CF.petunjuk.length?CF.petunjuk:D.petunjuk).join("\n")}
+$("#ps").addEventListener("input",()=>{CF.judul=$("#jd").value.trim()||DJ;CF.judul2=$("#jd2").value.trim();CF.alamat=$("#al").value.trim()||DA;CF.kodeBuka=$("#kb").value.trim()||"4321";CF.maksPelanggaran=+$("#mx").value||1;CF.wajibInstal=$("#wi").checked;CF.resetSecret=$("#rsx").value.trim();CF.judulAdmin=$("#jad").value.trim()||ZK.DEF.judulAdmin;CF.subAdmin=$("#sad").value.trim()||ZK.DEF.subAdmin;adminText(CF);CF.labelPilih=$("#lbm").value.trim()||ZK.DEF.labelPilih;CF.tombol=$("#tbm").value.trim()||ZK.DEF.tombol;CF.petunjukJudul=$("#pjt").value.trim()||ZK.DEF.petunjukJudul;CF.petunjuk=$("#pjl").value.split("\n").map(x=>x.trim()).filter(Boolean)});
+$("#rsr").onclick=()=>{$("#rsx").value=rnd(6);$("#ps").dispatchEvent(new Event("input"))};
+// ---- admin ----
+function rAdm(){const u=ME.r=="utama",h=AD.admins.filter(a=>a.r!="utama").length,L=u?AD.admins:[{u:ME.u,n:ME.n,r:ME.r,jenjang:ME.akses}];
+ $("#al2").innerHTML=L.map((a,i)=>`<div class="c"><b>${esc(a.n)}</b> <small style="display:inline">@${esc(a.u)}${a.r=="utama"?" · admin utama":""}</small>
+ ${a.r=="utama"?`<small>Akses: semua jenjang</small>`:(u?`<div class="ak"><b>Akses jenjang:</b>${KG.map(([g])=>`<label><input type="checkbox" data-ak="${i}" data-g="${g}"${(a.jenjang||[]).includes(g)?" checked":""}> Kelas ${g}</label>`).join("")}</div>`:`<small>Akses Anda: <b>${esc(aksesLabel())}</b></small>`)}
+ ${u&&a.r!="utama"?`<div><button class="bt o" onclick="resetPw(${i})">🔑 Reset kata sandi</button><button class="bt r" onclick="delAd(${i})">Hapus</button></div>`:""}</div>`).join("");
+ $("#pwnote").style.display=u?"block":"none";$("#addbox").style.display=u?"block":"none";$("#addinfo").textContent=u?(h<2?`Admin tambahan: ${h} dari 2`:"Batas 2 admin tambahan sudah tercapai."):""}
+let akQ=Promise.resolve();
+$("#al2").addEventListener("change",e=>{const t=e.target;if(t.dataset.ak===undefined)return;const i=+t.dataset.ak,g=t.dataset.g,on=t.checked;
+ akQ=akQ.then(async()=>{const a=AD.admins[i],set=new Set(a.jenjang||[]);on?set.add(g):set.delete(g);const jj=KG.map(x=>x[0]).filter(k=>set.has(k));
+  if(API){pop("Sedang memproses data…");const r=await post({a:"setAkses",tok:TOK,u:a.u,jenjang:jj});if(!r.ok){popOff();alert(r.err);return rAdm()}AD.admins=r.admins;pop("Akses "+a.n+" diperbarui ✓ (langsung berlaku)","ok",2500)}
+  else{a.jenjang=jj;pop("Akses diubah. Unduh admin.json agar berlaku.","ok",3500)}})});
+async function resetPw(i){const a=AD.admins[i];if(!await dlg({t:"Reset kata sandi?",m:"Kata sandi sementara baru akan dibuat untuk "+a.n+". Kata sandi lamanya tidak berlaku lagi.",y:"Ya, reset"}))return;
+ pop("Sedang memproses data…");let pw;
+ if(API){const r=await post({a:"resetAdmin",tok:TOK,u:a.u});popOff();if(!r.ok)return alert(r.err);pw=r.pw}
+ else{pw=rnd(6);a.s=rnd(8);a.h=await hp(a.s,pw);a.tmp=1;popOff()}
+ await dlg({t:"Kata sandi sementara",m:"Untuk "+a.n+" (@"+a.u+"):\n\n"+pw+"\n\nBerikan kepada yang bersangkutan. Ia akan diminta menggantinya setelah masuk."+(API?"":"\n\nUnduh admin.json lalu timpa file di folder agar berlaku."),y:"Mengerti",n:false})}
+$("#aa").onclick=async()=>{const u=$("#au").value.trim().toLowerCase(),n=$("#an").value.trim(),p=$("#ap").value,jj=[...$$(".na")].filter(c=>c.checked).map(c=>c.value);
+ if(AD.admins.filter(a=>a.r!="utama").length>=2)return alert("Maksimal 2 admin pembantu.");
+ if(!/^[a-z0-9._-]{3,20}$/.test(u)||!n||p.length<6)return alert("Isi nama pengguna (3–20 huruf kecil/angka), nama lengkap, dan kata sandi minimal 6 karakter.");
+ if(AD.admins.some(a=>a.u==u))return alert("Nama pengguna sudah dipakai.");
+ if(API){const r=await post({a:"addAdmin",tok:TOK,u,n,p,jenjang:jj});if(!r.ok)return alert(r.err);AD.admins=r.admins;["#au","#an","#ap"].forEach(x=>$(x).value="");$$(".na").forEach(c=>c.checked=false);rAdm();return alert("Admin ditambahkan.")}
+ const s=rnd(8);AD.admins.push({u,n,r:"pembantu",jenjang:jj,s,h:await hp(s,p)});["#au","#an","#ap"].forEach(x=>$(x).value="");$$(".na").forEach(c=>c.checked=false);rAdm();alert("Admin ditambahkan. Unduh admin.json lalu timpa file di hosting agar berlaku.")};
+async function delAd(i){if(ME.r=="utama"&&AD.admins[i].r!="utama"&&await dlg({t:"Hapus admin?",m:"Admin ini akan dihapus. Jadwal miliknya kembali ke admin utama.",y:"Ya, hapus"})){if(API){if(dirty)return alert("Simpan perubahan Anda dulu sebelum menghapus admin.");const r=await post({a:"delAdmin",tok:TOK,u:AD.admins[i].u});if(!r.ok)return alert(r.err);AD.admins=r.admins;try{await loadApi()}catch(e){}}else{const x=AD.admins[i].u;AD.admins.splice(i,1);CF.jadwal.forEach(j=>{if(j.owner==x)j.owner=UT()})}rAdm()}}
+$("#cp").onclick=async()=>{if(API){const n=$("#np").value;if(n.length<6)return alert("Kata sandi baru minimal 6 karakter.");const r=await post({a:"chpw",tok:TOK,old:$("#op").value,new:n});if(!r.ok)return alert(r.err);$("#op").value=$("#np").value="";$("#warn").style.display="none";return alert("Kata sandi diganti.")}
+ const n=$("#np").value;if(await hp(ME.s,$("#op").value)!==ME.h)return alert("Kata sandi lama salah.");if(n.length<6)return alert("Kata sandi baru minimal 6 karakter.");
+ ME.s=rnd(8);ME.h=await hp(ME.s,n);ME.tmp=0;$("#op").value=$("#np").value="";$("#warn").style.display="none";alert("Tersimpan. Unduh admin.json lalu timpa file di hosting agar berlaku.")};
+// ---- unduh ----
+$("#d1").onclick=()=>{const o={...CF};delete o.pin;dl(o,"jadwal.json")};$("#d2").onclick=()=>dl(SL,"siswa.json");$("#d3").onclick=()=>dl(AD,"admin.json");
+// ---- mode server (Google Apps Script) ----
+async function post(o){try{const r=await fetch(API,{method:"POST",body:JSON.stringify(o)});return await r.json()}catch(e){return{ok:false,err:"Tidak bisa terhubung ke server. Periksa internet dan alamat API di config.js."}}}
+function mark(){if(!API)return;dirty=true;$("#st").textContent="● Belum disimpan"}
+async function loadApi(){const r=await post({a:"load",tok:TOK});if(!r.ok){if(r.expired)sessionStorage.clear();throw r.err}
+ VER=r.ver||0;DEL=[];if(ME&&r.akses){ME.akses=r.akses;sessionStorage.me=JSON.stringify(ME);setBadge()}CF=r.cfg||{jadwal:[]};CF.jadwal=CF.jadwal||[];adminText(CF);SL=r.siswa||[];AD={admins:r.admins||[]};
+ if(!CF.saved){const c=await get("jadwal.json",null),sw=await get("siswa.json",null);
+  if(c&&c.jadwal){CF=c;delete CF.pin}if(sw)SL=sw;if(c||sw){mark();$("#st").textContent="● Data awal diambil dari file website. Klik Simpan."}}}
+$("main").addEventListener("input",e=>{if(!e.target.closest("#t-Token,#t-Admin"))mark()});
+$("main").addEventListener("change",e=>{if(!e.target.closest("#t-Token,#t-Admin"))mark()});
+addEventListener("beforeunload",e=>{if(API&&dirty){e.preventDefault();e.returnValue=""}});
+function cek(){const m=[];CF.jadwal.filter(vis).forEach(j=>{const n=j.mapel||"(tanpa nama)";
+ if(!j.mapel)m.push("Ada jadwal yang belum diberi nama mata pelajaran.");
+ if(!Array.isArray(j.kelasList))j.kelasList=parseKelas(j.kelas);if(!j.kelasList.length)m.push(n+": pilih minimal satu kelas peserta.");else if(ME.r!="utama"&&j.kelasList.some(x=>!allowedK().includes(x)))m.push(n+": ada kelas di luar akses Anda.");
+ if(!j.mulai||!j.selesai)m.push(n+": tanggal dan jam mulai/selesai belum lengkap.");else if(+new Date(j.selesai)<=+new Date(j.mulai))m.push(n+": waktu selesai harus setelah waktu mulai.");
+ if(!(+j.durasi>0))m.push(n+": durasi harus lebih dari 0 menit.");
+ if(!/docs\.google\.com\/forms|forms\.gle/.test(j.link||""))m.push(n+": link Google Formulir belum diisi dengan benar.")});return[...new Set(m)]}
+async function saveAll(){
+ const er=cek();if(er.length){await dlg({t:"Periksa kembali jadwal",m:er.slice(0,6).join("\n")+(er.length>6?"\n…dan "+(er.length-6)+" lainnya":""),y:"Mengerti",n:false});return}
+ if(!API){const o={...CF};delete o.pin;dl(o,"jadwal.json");setTimeout(()=>dl(SL,"siswa.json"),500);pop("File jadwal.json dan siswa.json diunduh. Timpa file lama di folder, lalu unggah ke hosting.","ok",5000);return}
+ pop("Sedang memproses data…");$("#st").textContent="Menyimpan…";const o={...CF};delete o.pin;o.saved=1;
+ const r=await post({a:"save",tok:TOK,cfg:o,siswa:ME.r=="utama"?SL:undefined,ver:VER,del:DEL});
+ if(r.ok){dirty=false;VER=r.ver;DEL=[];$("#st").textContent="✓ Tersimpan "+new Date().toLocaleTimeString("id-ID");pop("Berhasil disimpan ✓","ok",2500)}
+ else if(r.conflict){popOff();$("#st").textContent="⚠ Data diubah admin lain";if(await dlg({t:"Data sudah diubah admin lain",m:"Seseorang menyimpan perubahan setelah Anda membuka panel. Muat ulang data terbaru? Perubahan Anda yang belum disimpan akan hilang.",y:"Muat ulang",n:"Tetap di sini"})){try{await loadApi();dirty=false;$("#st").textContent="Data terbaru dimuat";renderTab()}catch(e){alert(e)}}}
+ else{$("#st").textContent="Gagal menyimpan";pop("Gagal menyimpan: "+r.err,"er",5000);if(r.expired){sessionStorage.clear();setTimeout(()=>location.reload(),2500)}}}
+$("#sv").onclick=saveAll;$$(".sv2").forEach(b=>b.onclick=saveAll);
+setInterval(async()=>{if(!API||!ME||!TOK)return;const r=await post({a:"ver",tok:TOK});if(!r.ok||r.ver===VER)return;
+ if(!dirty){try{await loadApi();renderTab();pop("Data diperbarui dari admin lain ✓","ok",2500)}catch(e){}}else $("#st").textContent="⚠ Admin lain mengubah data. Simpan dapat ditolak; muat ulang halaman jika perlu."},45000);
+(async()=>{
+ APIpub().then(adminText);
+ if(API){if(TOK&&sessionStorage.me){try{ME=JSON.parse(sessionStorage.me);await loadApi();start(ME)}catch(e){sessionStorage.clear()}}return}
+ CF=await get("jadwal.json",{jadwal:[]});CF.jadwal=CF.jadwal||[];SL=await get("siswa.json",[]);AD=await get("admin.json",{admins:[]});
+ if(!AD.admins.length)$("#le").textContent="File admin.json tidak ditemukan di hosting.";
+ const a=AD.admins.find(x=>x.u==sessionStorage.adm);if(a)start(a)})();
+</script></body></html>
