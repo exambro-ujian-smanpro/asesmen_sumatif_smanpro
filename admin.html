@@ -53,11 +53,12 @@ button,select,.bt,input[type=checkbox],nav button,a{cursor:pointer}button:disabl
 <label>Nama pengguna</label><input id="lu" autocomplete="username" autocapitalize="none"><label>Kata sandi</label><input id="lp" type="password" autocomplete="current-password">
 <button class="bt" id="bl">Masuk</button><p class="er" id="le"></p></div></section>
 <section id="app">
-<aside id="sb"><div class="sbh"><img src="logo.png" alt=""><b id="ah2">Panel Admin</b></div><nav id="nv"></nav><div class="sbf">Created by SMAN 1 Pronojiwo</div></aside><div id="sbk"></div>
+<aside id="sb"><div class="sbh"><img src="logo.png" alt=""><b id="ah2">Panel Admin</b></div><nav id="nv"></nav><div class="sbf">Created by SMAN 1 Pronojiwo<br><span id="svr"></span></div></aside><div id="sbk"></div>
 <div id="mn"><div id="top">
 <header><button id="tg" title="Sembunyikan / tampilkan menu">☰</button><b id="pg">Jadwal</b><span class="rbd" id="rbg"></span><span class="fx"></span>
  <div class="acc"><button id="ab" title="Akun">👤</button><div id="am"><div class="an"><b id="me"></b><small id="mr"></small></div><button id="out">⏻ Keluar</button></div></div></header>
 <div class="wn" id="warn">⚠ Kata sandi Anda masih bawaan atau sementara. Segera ganti di menu <b>Admin</b>.</div>
+<div class="wn" id="svw" style="background:#fde2e4;color:#8a1c2b">⚠ <b>Script Google Anda masih versi lama</b>, sehingga pengaturan akses jenjang tidak dapat disimpan. Tempel <b>Code.gs</b> terbaru, lalu <b>Deploy → Kelola deployment → ikon pensil → Versi baru</b> pada deployment yang alamat /exec-nya <b>sama persis</b> dengan di config.js. Untuk mengecek: buka alamat /exec diikuti <b>?cek=1</b>; harus tampil tulisan versi.</div>
 <div class="bar" id="barA" style="display:none"><button class="sv" id="sv">Simpan</button><span id="st">Belum ada perubahan</span></div>
 <div class="bar" id="barF"><span><b>Mode manual:</b> tombol Simpan otomatis belum aktif (isi alamat Google Apps Script di config.js). Sampai saat itu, unduh file lalu timpa file lama di folder:</span>
 <button id="d1">Unduh jadwal.json</button><button id="d2">Unduh siswa.json</button><button id="d3">Unduh admin.json</button></div>
@@ -237,10 +238,12 @@ $("#cp").onclick=async()=>{if(API){const n=$("#np").value;if(n.length<6)return a
 // ---- unduh ----
 $("#d1").onclick=()=>{const o={...CF};delete o.pin;dl(o,"jadwal.json")};$("#d2").onclick=()=>dl(SL,"siswa.json");$("#d3").onclick=()=>dl(AD,"admin.json");
 // ---- mode server (Google Apps Script) ----
-async function post(o){try{const r=await fetch(API,{method:"POST",body:JSON.stringify(o)});return await r.json()}catch(e){return{ok:false,err:"Tidak bisa terhubung ke server. Periksa internet dan alamat API di config.js."}}}
+const OLDMSG="Script Google Anda masih versi lama. Tempel Code.gs terbaru, lalu Deploy → Kelola deployment → ikon pensil → Versi baru, pada deployment yang alamat /exec-nya sama dengan di config.js.";
+let SV="";function svBanner(){const old=!!API&&!SV;$("#svw").style.display=old?"block":"none";$("#svr").textContent=API?"Server: "+(SV||"versi lama (perlu diperbarui)"):""}
+async function post(o){try{const r=await fetch(API,{method:"POST",body:JSON.stringify(o)});const j=await r.json();if(j&&j.err&&/Perintah tidak dikenal/.test(j.err)&&!j.versi)j.err=OLDMSG;if(j&&j.versi!==undefined){SV=j.versi;svBanner()}return j}catch(e){return{ok:false,err:"Tidak bisa terhubung ke server. Periksa internet dan alamat API di config.js."}}}
 function mark(){if(!API)return;dirty=true;$("#st").textContent="● Belum disimpan"}
 async function loadApi(){const r=await post({a:"load",tok:TOK});if(!r.ok){if(r.expired)sessionStorage.clear();throw r.err}
- VER=r.ver||0;DEL=[];if(ME&&r.akses){ME.akses=r.akses;sessionStorage.me=JSON.stringify(ME);setBadge()}CF=r.cfg||{jadwal:[]};CF.jadwal=CF.jadwal||[];adminText(CF);SL=r.siswa||[];AD={admins:r.admins||[]};
+ VER=r.ver||0;DEL=[];SV=r.versi||"";svBanner();if(ME&&r.akses){ME.akses=r.akses;sessionStorage.me=JSON.stringify(ME);setBadge()}CF=r.cfg||{jadwal:[]};CF.jadwal=CF.jadwal||[];adminText(CF);SL=r.siswa||[];AD={admins:r.admins||[]};
  if(!CF.saved){const c=await get("jadwal.json",null),sw=await get("siswa.json",null);
   if(c&&c.jadwal){CF=c;delete CF.pin}if(sw)SL=sw;if(c||sw){mark();$("#st").textContent="● Data awal diambil dari file website. Klik Simpan."}}}
 $("main").addEventListener("input",e=>{if(!e.target.closest("#t-Token,#t-Admin"))mark()});
