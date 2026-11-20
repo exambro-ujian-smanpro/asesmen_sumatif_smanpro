@@ -124,18 +124,21 @@ async function load(){localStorage.removeItem("cfgLocal");localStorage.removeIte
  cfg.jadwal=cfg.jadwal||[];localStorage.cfgCache=JSON.stringify(cfg)}
 const stat=j=>{const n=Date.now();return n<+new Date(j.mulai)?"soon":n>+new Date(j.selesai)?"over":"open"};
 const norm=u=>{u=u.trim();return u.includes("embedded=true")?u:u+(u.includes("?")?"&":"?")+"embedded=true"};
-const valid=j=>j.mapel&&j.link&&j.mulai&&j.selesai&&!isNaN(+new Date(j.mulai))&&!isNaN(+new Date(j.selesai));
+const valid=j=>j.mapel&&(j.link||j.sv)&&j.mulai&&j.selesai&&!isNaN(+new Date(j.mulai))&&!isNaN(+new Date(j.selesai));
 const kelasCocok=(j,kl)=>{if(!kl)return false;const L=j.kelasList;if(Array.isArray(L)&&L.length)return L.includes(kl);const t=String(j.kelas||"").trim().toUpperCase();if(!t||t=="SEMUA KELAS")return true;
  const m=t.match(/^SEMUA KELAS (XII|XI|X)$/);if(m)return kl.startsWith(m[1]+"-");return t.split(/[,;]\s*/).some(x=>x.trim()==kl)};
 function renderList(){const o=$("#ex"),v=o.value,kl=$("#kl").value,L=cfg.jadwal.filter(j=>valid(j)&&stat(j)=="open"&&kelasCocok(j,kl));o.innerHTML="";
  if(!L.length){const p=document.createElement("option");p.value="";p.textContent=kl?"Belum ada mapel yang diujikan":(SL.length?"Pilih nama Anda terlebih dahulu":"Pilih kelas terlebih dahulu");o.append(p);o.disabled=true;o.classList.add("fd");$("#go").disabled=true;$("#tkw").style.display="none";return}
  o.classList.remove("fd");o.disabled=false;L.forEach(j=>{const p=document.createElement("option");p.value=j.id;p.textContent=j.mapel;o.append(p)});
- o.value=(v&&L.some(j=>j.id==v))?v:L[0].id;$("#go").disabled=false;const jj=L.find(x=>x.id==o.value);$("#tkw").style.display=jj&&(jj.token||jj.tokenAuto)?"block":"none"}
+ o.value=(v&&L.some(j=>j.id==v))?v:L[0].id;$("#go").disabled=false;const jj=L.find(x=>x.id==o.value);$("#tkw").style.display=jj&&(jj.token||jj.tokenAuto||jj.adaToken)?"block":"none"}
 setInterval(()=>{$("#ck").textContent=new Date().toLocaleTimeString("id-ID");if($("#login").classList.contains("on")){const g=cfg.jadwal.map(stat).join()+"|"+$("#kl").value;if(g!==lg){lg=g;renderList()}}},1000);
 $("#ex").onchange=renderList;
+async function apiPost(o){const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);
+ try{const r=await fetch(API_URL,{method:"POST",body:JSON.stringify(o),signal:c.signal});return await r.json()}
+ catch(e){return{ok:false,err:"Tidak dapat terhubung ke server. Periksa paket data lalu coba lagi."}}finally{clearTimeout(t)}}
 async function boot(){await load();await loadSiswa();applyText();
  if(cfg.wajibInstal&&!standalone()){show("gate");const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);$(ios?"#ios":"#and").style.display="block";return}
- if(S&&S.end>Date.now()&&cfg.jadwal.find(j=>j.id==S.id)){enter();return}
+ if(S&&S.end>Date.now()&&cfg.jadwal.find(j=>j.id==S.id)){if(S.link||cfg.jadwal.find(j=>j.id==S.id).link){enter();return}localStorage.removeItem("sess");S=null}
  renderList();show("login")}
 const err=m=>{$("#info").textContent=m;$("#info").style.color="#d62839"};
 $("#go").onclick=async()=>{let nm=$("#nm").value.trim().toUpperCase(),kl=$("#kl").value,ni=$("#ni").value.trim();const tk=$("#tk").value.trim().toUpperCase(),j=cfg.jadwal.find(x=>x.id==$("#ex").value);
@@ -144,17 +147,19 @@ $("#go").onclick=async()=>{let nm=$("#nm").value.trim().toUpperCase(),kl=$("#kl"
  if(SL.length){const e=SL.find(x=>x.n==nm&&x.k==kl);if(!e)return err("Nama atau kelas tidak cocok dengan daftar siswa. Pilih nama dari saran yang muncul.");ni=e.i||e.n}
  if(!ni)return err("Isi NISN.");
  if(!j||stat(j)!="open"||!kelasCocok(j,kl))return err("Pilih mata pelajaran yang sedang diujikan untuk kelas Anda.");
- if(j.tokenAuto){if(!ZK.tokenOK(j.tokenSecret||"",+j.tokenMenit||15,tk))return err("Token salah atau sudah berganti. Minta token terbaru kepada pengawas.")}else if(j.token&&tk!==String(j.token).toUpperCase())return err("Token ujian salah. Minta token kepada pengawas.");
+ let lnk=null;
+ if(j.sv){$("#go").disabled=true;pop("Memeriksa token…");const r=await apiPost({a:"mulai",id:j.id,kl,ni,tk});popOff();$("#go").disabled=false;if(!r.ok)return err(r.err||"Gagal memeriksa token.");lnk=r.link}
+ else if(j.tokenAuto){if(!ZK.tokenOK(j.tokenSecret||"",+j.tokenMenit||15,tk))return err("Token salah atau sudah berganti. Minta token terbaru kepada pengawas.")}else if(j.token&&tk!==String(j.token).toUpperCase())return err("Token ujian salah. Minta token kepada pengawas.");
  const dn=J("done")||{},key=nm+"|"+kl+"|"+ni+"|"+j.id;if(dn[key])return err("Anda sudah menyelesaikan ujian ini.");
  popOff();
  if(!await ask({t:"Periksa data Anda",m:"Nama: "+nm+"\nKelas: "+kl+"\nNISN: "+ni+"\n"+(cfg.labelPilih||"Mata pelajaran")+": "+j.mapel+"\n\nApakah data yang Anda isi sudah benar dan lanjut memulai ujian?",y:"Ya, mulai",n:"Periksa lagi"}))return;
  pop("Sedang memproses data…");await wait(800);
- S={id:j.id,key,nm,kl,ni,st:Date.now(),end:Math.min(Date.now()+j.durasi*60000,+new Date(j.selesai)),v:[]};sv();enter();setTimeout(popOff,600)};
+ S={id:j.id,key,nm,kl,ni,st:Date.now(),end:Math.min(Date.now()+j.durasi*60000,+new Date(j.selesai)),v:[],link:lnk};sv();enter();setTimeout(popOff,600)};
 function buildUrl(l){try{const u=new URL(l.trim()),m={NAMA:S.nm,KELAS:S.kl,NISN:S.ni};
  [...u.searchParams.entries()].forEach(([k,v])=>{const x=m[v.trim().toUpperCase()];if(x!==undefined)u.searchParams.set(k,x)});
  u.searchParams.set("embedded","true");return u.toString()}catch(e){return norm(l)}}
 async function enter(){const j=cfg.jadwal.find(x=>x.id==S.id);$("#wn").textContent=S.nm;$("#wm").textContent=`${S.kl} · ${j.mapel}`;
- loads=0;$("#fr").src=buildUrl(j.link);show("exam");act=true;
+ loads=0;$("#fr").src=buildUrl(S.link||j.link);show("exam");act=true;
  try{await document.documentElement.requestFullscreen?.()}catch(e){}try{wl=await navigator.wakeLock?.request("screen")}catch(e){}
  clearInterval(tk);tk=setInterval(tick,500);tick();if(S.v.length>=cfg.maksPelanggaran)lockIt();if(S.early)showEarly()}
 function tick(){const r=S.end-Date.now();if(r<=0)return finish("Waktu ujian habis","Jawaban yang sudah Anda kirim melalui formulir telah tersimpan.");
@@ -200,9 +205,13 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 let loads=0;
 function showEarly(){const j=cfg.jadwal.find(x=>x.id==S.id)||{};$("#etx").textContent="Anda mengirim jawaban lebih cepat dari ketentuan (batas: "+(+j.kirimSisa||0)+" menit sebelum waktu ujian berakhir). Minta admin mereset akun Anda, lalu masukkan token dari admin. Kesempatan mengerjakan ulang hanya 1 kali; jika melanggar lagi, ujian dianggap selesai.";
  $("#eid").textContent=S.nm+" · "+S.kl+" · NISN "+S.ni;$("#ec").value="";$("#early").classList.add("on")}
-$("#eb").onclick=async()=>{const k=$("#ec").value.trim().toUpperCase();pop("Sedang memproses data…");await wait(700);popOff();
- if(k&&ZK.resetOK(cfg.resetSecret||"SMANPRO",S.ni,S.id,k)){S.early=false;S.rs=1;sv();$("#early").classList.remove("on");const j=cfg.jadwal.find(x=>x.id==S.id);loads=0;$("#fr").src=buildUrl(j.link);return}
- $("#ec").value="";$("#ec").placeholder="Token salah. Minta ke admin"};
+$("#eb").onclick=async()=>{const k=$("#ec").value.trim().toUpperCase();pop("Sedang memproses data…");await wait(700);
+ const j=cfg.jadwal.find(x=>x.id==S.id)||{};let ok=false,lnk=S.link||j.link,pesan="Token salah. Minta ke admin";
+ if(k){if(j.sv){const r=await apiPost({a:"reset",id:S.id,ni:S.ni,code:k});if(r.ok){ok=true;lnk=r.link}else if(r.err)pesan=r.err}
+  else ok=ZK.resetOK(cfg.resetSecret||"SMANPRO",S.ni,S.id,k)}
+ popOff();
+ if(ok){S.early=false;S.rs=1;if(lnk)S.link=lnk;sv();$("#early").classList.remove("on");loads=0;$("#fr").src=buildUrl(lnk);return}
+ $("#ec").value="";$("#ec").placeholder=pesan};
 $("#fr").addEventListener("load",()=>{if(!act||!S)return;loads++;const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kirimSisa||0;
  if(j.formSatu&&N>0&&!S.early&&loads>1&&(S.end-Date.now())/60000>N){
   if(S.rs>=1){finish("Ujian dianggap selesai","Anda mengirim jawaban lebih cepat dari ketentuan untuk kedua kalinya. Kesempatan mengerjakan ulang sudah terpakai, sehingga ujian dinyatakan selesai.");return}
