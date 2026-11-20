@@ -53,12 +53,11 @@ button,select,.bt,input[type=checkbox],nav button,a{cursor:pointer}button:disabl
 <label>Nama pengguna</label><input id="lu" autocomplete="username" autocapitalize="none"><label>Kata sandi</label><input id="lp" type="password" autocomplete="current-password">
 <button class="bt" id="bl">Masuk</button><p class="er" id="le"></p></div></section>
 <section id="app">
-<aside id="sb"><div class="sbh"><img src="logo.png" alt=""><b id="ah2">Panel Admin</b></div><nav id="nv"></nav><div class="sbf">Created by SMAN 1 Pronojiwo<br><span id="svr"></span></div></aside><div id="sbk"></div>
+<aside id="sb"><div class="sbh"><img src="logo.png" alt=""><b id="ah2">Panel Admin</b></div><nav id="nv"></nav><div class="sbf">Created by SMAN 1 Pronojiwo</div></aside><div id="sbk"></div>
 <div id="mn"><div id="top">
 <header><button id="tg" title="Sembunyikan / tampilkan menu">☰</button><b id="pg">Jadwal</b><span class="rbd" id="rbg"></span><span class="fx"></span>
  <div class="acc"><button id="ab" title="Akun">👤</button><div id="am"><div class="an"><b id="me"></b><small id="mr"></small></div><button id="out">⏻ Keluar</button></div></div></header>
 <div class="wn" id="warn">⚠ Kata sandi Anda masih bawaan atau sementara. Segera ganti di menu <b>Admin</b>.</div>
-<div class="wn" id="svw" style="background:#fde2e4;color:#8a1c2b">⚠ <b>Script Google Anda masih versi lama</b>, sehingga pengaturan akses jenjang tidak dapat disimpan. Tempel <b>Code.gs</b> terbaru, lalu <b>Deploy → Kelola deployment → ikon pensil → Versi baru</b> pada deployment yang alamat /exec-nya <b>sama persis</b> dengan di config.js. Untuk mengecek: buka alamat /exec diikuti <b>?cek=1</b>; harus tampil tulisan versi.</div>
 <div class="bar" id="barA" style="display:none"><button class="sv" id="sv">Simpan</button><span id="st">Belum ada perubahan</span></div>
 <div class="bar" id="barF"><span><b>Mode manual:</b> tombol Simpan otomatis belum aktif (isi alamat Google Apps Script di config.js). Sampai saat itu, unduh file lalu timpa file lama di folder:</span>
 <button id="d1">Unduh jadwal.json</button><button id="d2">Unduh siswa.json</button><button id="d3">Unduh admin.json</button></div>
@@ -77,7 +76,7 @@ button,select,.bt,input[type=checkbox],nav button,a{cursor:pointer}button:disabl
  <label>Nama pilihan di halaman login (contoh: Mata pelajaran / Kegiatan)</label><input id="lbm"><label>Tulisan tombol mulai</label><input id="tbm"><label>Judul petunjuk</label><input id="pjt"><label>Isi petunjuk (satu baris = satu poin; **teks** untuk tebal)</label><textarea id="pjl" rows="9"></textarea><label>Kode pengawas (buka kunci & keluar)</label><input id="kb"><label>Batas pelanggaran sebelum layar terkunci</label><input id="mx" type="number" min="1">
  <label>Rahasia kode reset (kosong = bawaan; isi acak lebih aman)</label><div class="g2"><input id="rsx"><button class="bt" style="margin:0" id="rsr">Acak</button></div>
  <div class="ck"><input type="checkbox" id="wi"><span>Wajib pasang aplikasi (PWA) sebelum ujian</span></div><button class="bt g sv2">Simpan</button></div></div>
-<div class="tab" id="t-Admin"><div class="c" id="pwnote"><small style="margin:0">Kata sandi disimpan dalam bentuk terenkripsi sehingga <b>tidak dapat dilihat</b>. Jika admin pembantu lupa kata sandi, klik <b>Reset kata sandi</b>, lalu berikan kata sandi sementara yang muncul kepada yang bersangkutan.</small></div><div id="al2"></div><div class="c" id="addbox"><b>Tambah admin (maksimal 2)</b><br><small id="addinfo"></small>
+<div class="tab" id="t-Admin"><div class="c" id="pwnote"><small style="margin:0">Kata sandi disimpan dalam bentuk terenkripsi sehingga <b>tidak dapat dilihat</b>. Jika admin pembantu lupa kata sandi, klik <b>Reset kata sandi</b>, lalu berikan kata sandi sementara yang muncul kepada yang bersangkutan.</small></div><div id="al2"></div><div class="c" id="addbox"><b>Tambah admin (maksimal 4)</b><br><small id="addinfo"></small>
  <label>Nama pengguna (huruf kecil/angka)</label><input id="au" autocapitalize="none"><label>Nama lengkap</label><input id="an"><label>Kata sandi (min. 6 karakter)</label><input id="ap" type="password"><label>Akses jenjang (boleh lebih dari satu)</label><div class="ak"><label><input type="checkbox" class="na" value="X"> Kelas X</label><label><input type="checkbox" class="na" value="XI"> Kelas XI</label><label><input type="checkbox" class="na" value="XII"> Kelas XII</label></div><small>Jenjang yang dipilih menentukan jadwal yang boleh diatur admin ini. Dapat diubah kapan saja di daftar admin di atas.</small>
 <button class="bt g" id="aa">Tambah</button></div>
  <div class="c"><b>Ganti kata sandi saya</b><label>Kata sandi lama</label><input id="op" type="password"><label>Kata sandi baru (min. 6 karakter)</label><input id="np" type="password"><button class="bt" id="cp">Simpan kata sandi</button></div></div>
@@ -214,7 +213,7 @@ function rAdm(){const u=ME.r=="utama",h=AD.admins.filter(a=>a.r!="utama").length
  $("#al2").innerHTML=L.map((a,i)=>`<div class="c"><b>${esc(a.n)}</b> <small style="display:inline">@${esc(a.u)}${a.r=="utama"?" · admin utama":""}</small>
  ${a.r=="utama"?`<small>Akses: semua jenjang</small>`:(u?`<div class="ak"><b>Akses jenjang:</b>${KG.map(([g])=>`<label><input type="checkbox" data-ak="${i}" data-g="${g}"${(a.jenjang||[]).includes(g)?" checked":""}> Kelas ${g}</label>`).join("")}</div>`:`<small>Akses Anda: <b>${esc(aksesLabel())}</b></small>`)}
  ${u&&a.r!="utama"?`<div><button class="bt o" onclick="resetPw(${i})">🔑 Reset kata sandi</button><button class="bt r" onclick="delAd(${i})">Hapus</button></div>`:""}</div>`).join("");
- $("#pwnote").style.display=u?"block":"none";$("#addbox").style.display=u?"block":"none";$("#addinfo").textContent=u?(h<2?`Admin tambahan: ${h} dari 2`:"Batas 2 admin tambahan sudah tercapai."):""}
+ $("#pwnote").style.display=u?"block":"none";$("#addbox").style.display=u?"block":"none";$("#addinfo").textContent=u?(h<4?`Admin tambahan: ${h} dari 4`:"Batas 4 admin tambahan sudah tercapai."):""}
 let akQ=Promise.resolve();
 $("#al2").addEventListener("change",e=>{const t=e.target;if(t.dataset.ak===undefined)return;const i=+t.dataset.ak,g=t.dataset.g,on=t.checked;
  akQ=akQ.then(async()=>{const a=AD.admins[i],set=new Set(a.jenjang||[]);on?set.add(g):set.delete(g);const jj=KG.map(x=>x[0]).filter(k=>set.has(k));
@@ -226,7 +225,7 @@ async function resetPw(i){const a=AD.admins[i];if(!await dlg({t:"Reset kata sand
  else{pw=rnd(6);a.s=rnd(8);a.h=await hp(a.s,pw);a.tmp=1;popOff()}
  await dlg({t:"Kata sandi sementara",m:"Untuk "+a.n+" (@"+a.u+"):\n\n"+pw+"\n\nBerikan kepada yang bersangkutan. Ia akan diminta menggantinya setelah masuk."+(API?"":"\n\nUnduh admin.json lalu timpa file di folder agar berlaku."),y:"Mengerti",n:false})}
 $("#aa").onclick=async()=>{const u=$("#au").value.trim().toLowerCase(),n=$("#an").value.trim(),p=$("#ap").value,jj=[...$$(".na")].filter(c=>c.checked).map(c=>c.value);
- if(AD.admins.filter(a=>a.r!="utama").length>=2)return alert("Maksimal 2 admin pembantu.");
+ if(AD.admins.filter(a=>a.r!="utama").length>=4)return alert("Maksimal 4 admin pembantu.");
  if(!/^[a-z0-9._-]{3,20}$/.test(u)||!n||p.length<6)return alert("Isi nama pengguna (3–20 huruf kecil/angka), nama lengkap, dan kata sandi minimal 6 karakter.");
  if(AD.admins.some(a=>a.u==u))return alert("Nama pengguna sudah dipakai.");
  if(API){const r=await post({a:"addAdmin",tok:TOK,u,n,p,jenjang:jj});if(!r.ok)return alert(r.err);AD.admins=r.admins;["#au","#an","#ap"].forEach(x=>$(x).value="");$$(".na").forEach(c=>c.checked=false);rAdm();return alert("Admin ditambahkan.")}
@@ -238,12 +237,10 @@ $("#cp").onclick=async()=>{if(API){const n=$("#np").value;if(n.length<6)return a
 // ---- unduh ----
 $("#d1").onclick=()=>{const o={...CF};delete o.pin;dl(o,"jadwal.json")};$("#d2").onclick=()=>dl(SL,"siswa.json");$("#d3").onclick=()=>dl(AD,"admin.json");
 // ---- mode server (Google Apps Script) ----
-const OLDMSG="Script Google Anda masih versi lama. Tempel Code.gs terbaru, lalu Deploy → Kelola deployment → ikon pensil → Versi baru, pada deployment yang alamat /exec-nya sama dengan di config.js.";
-let SV="";function svBanner(){const old=!!API&&!SV;$("#svw").style.display=old?"block":"none";$("#svr").textContent=API?"Server: "+(SV||"versi lama (perlu diperbarui)"):""}
-async function post(o){try{const r=await fetch(API,{method:"POST",body:JSON.stringify(o)});const j=await r.json();if(j&&j.err&&/Perintah tidak dikenal/.test(j.err)&&!j.versi)j.err=OLDMSG;if(j&&j.versi!==undefined){SV=j.versi;svBanner()}return j}catch(e){return{ok:false,err:"Tidak bisa terhubung ke server. Periksa internet dan alamat API di config.js."}}}
+async function post(o){try{const r=await fetch(API,{method:"POST",body:JSON.stringify(o)});return await r.json()}catch(e){return{ok:false,err:"Tidak bisa terhubung ke server. Periksa internet dan alamat API di config.js."}}}
 function mark(){if(!API)return;dirty=true;$("#st").textContent="● Belum disimpan"}
 async function loadApi(){const r=await post({a:"load",tok:TOK});if(!r.ok){if(r.expired)sessionStorage.clear();throw r.err}
- VER=r.ver||0;DEL=[];SV=r.versi||"";svBanner();if(ME&&r.akses){ME.akses=r.akses;sessionStorage.me=JSON.stringify(ME);setBadge()}CF=r.cfg||{jadwal:[]};CF.jadwal=CF.jadwal||[];adminText(CF);SL=r.siswa||[];AD={admins:r.admins||[]};
+ VER=r.ver||0;DEL=[];if(ME&&r.akses){ME.akses=r.akses;sessionStorage.me=JSON.stringify(ME);setBadge()}CF=r.cfg||{jadwal:[]};CF.jadwal=CF.jadwal||[];adminText(CF);SL=r.siswa||[];AD={admins:r.admins||[]};
  if(!CF.saved){const c=await get("jadwal.json",null),sw=await get("siswa.json",null);
   if(c&&c.jadwal){CF=c;delete CF.pin}if(sw)SL=sw;if(c||sw){mark();$("#st").textContent="● Data awal diambil dari file website. Klik Simpan."}}}
 $("main").addEventListener("input",e=>{if(!e.target.closest("#t-Token,#t-Admin"))mark()});
