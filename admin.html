@@ -69,6 +69,17 @@ button,select,.bt,input[type=checkbox],nav button,a{cursor:pointer}button:disabl
 <label>Siswa <span id="rcnt"></span></label><select id="rn"></select><label>Mata pelajaran</label><select id="rm"></select>
 <button class="bt" id="rb">Reset akun siswa</button><div class="tk" id="rc"></div><small id="rs"></small></div></div>
 <div class="tab" id="t-Jadwal"><h2 class="ph" id="jh"></h2><div id="jl"></div><button class="bt" id="ad">+ Tambah jadwal</button> <button class="bt o" id="pj">Hapus jadwal yang sudah lewat</button> <button class="bt g sv2">Simpan</button></div>
+<div class="tab" id="t-Pantau"><h2 class="ph">Pantau ujian</h2>
+<div class="c"><label>Jadwal</label><select id="pnj"></select>
+<div style="margin-top:8px"><button class="bt" id="pnr">Segarkan</button> <button class="bt g" id="pnp">Unduh PDF</button> <button class="bt r" id="pnh" disabled>Hapus catatan</button></div>
+<small id="pni">Pencatatan berjalan otomatis hanya saat jadwal berlangsung.</small><small>Tombol Hapus catatan baru aktif setelah PDF diunduh.</small></div>
+<div class="c" id="pns"></div><div class="c" id="pnt" style="overflow-x:auto"></div><div class="c" id="pnb"></div>
+<details class="c" id="pnx"><summary><b>Panduan ujian (3 langkah)</b></summary>
+<p><b>1. Sebelum ujian.</b> Di menu <b>Jadwal</b>, centang <b>🛡️ Anti kirim dini</b> pada tiap jadwal. Salin kode kirim yang muncul ke Google Formulir (pertanyaan "Kode kirim", wajib diisi, dengan validasi Ekspresi reguler → Cocok dengan → kode tersebut). Ganti kode tiap ujian dengan tombol Buat kode baru.</p>
+<p><b>2. Saat ujian.</b> Buka menu <b>Pantau</b> dan pilih jadwal. Data diperbarui tiap 30 detik. Siswa yang keluar layar atau mengirim lebih cepat terlihat di sini. Kode kirim muncul sendiri di layar siswa pada menit-menit terakhir.</p>
+<p><b>3. Setelah ujian.</b> Klik <b>Unduh PDF</b>, lalu <b>Hapus catatan</b>. Untuk penilaian, pakai <b>jawaban terakhir</b> tiap NISN, jadi siswa yang salah kirim lalu direset tidak dirugikan. Di Google Sheet, buat sheet baru dan tempel rumus berikut (4 = nomor kolom NISN; ganti nama tab dan nomor kolom sesuai spreadsheet Anda; jika muncul galat, ganti tanda ; dengan ,):</p>
+<p style="word-break:break-all"><code>=SORTN(SORT('Tanggapan Formulir 1'!A2:Z;1;FALSE);9^9;2;4;TRUE)</code></p>
+</details></div>
 <div class="tab" id="t-Siswa"><div class="c"><label>Daftar siswa (satu baris: NAMA,KELAS,NISN — boleh tempel dari Excel)</label><textarea id="sl" rows="14"></textarea><small id="sc"></small></div></div>
 <div class="tab" id="t-Pengaturan"><div class="c" id="ps"><label>Judul panel admin</label><input id="jad"><label>Teks di bawah judul panel admin</label><input id="sad">
  <label>Judul halaman awal (baris 1)</label><input id="jd"><label>Baris ke-2 (kosongkan jika tidak perlu)</label><input id="jd2">
@@ -105,7 +116,7 @@ function adminText(c){const D=ZK.DEF,a=(c&&c.judulAdmin)||D.judulAdmin,b=(c&&c.s
 function dlg(o){popOff();return new Promise(res=>{$("#dgt").textContent=o.t;$("#dgm").textContent=o.m;$("#dgy").textContent=o.y||"Ya";$("#dgn").textContent=o.n||"Batal";$("#dgn").style.display=o.n===false?"none":"block";$("#dlgb").classList.add("on");
  const d=v=>{$("#dlgb").classList.remove("on");res(v)};$("#dgy").onclick=()=>d(true);$("#dgn").onclick=()=>d(false)})}
 let CF,SL,AD,ME,tab="Jadwal";let VER=0,DEL=[];
-const IC={Jadwal:"📅",Token:"🔑",Reset:"🔄",Siswa:"👥",Pengaturan:"⚙️",Admin:"🛡️"},T=["Jadwal","Token","Reset","Siswa","Pengaturan","Admin"],RS=()=>CF.resetSecret||"SMANPRO";
+const IC={Jadwal:"📅",Token:"🔑",Reset:"🔄",Pantau:"📡",Siswa:"👥",Pengaturan:"⚙️",Admin:"🛡️"},T=["Jadwal","Token","Reset","Pantau","Siswa","Pengaturan","Admin"],RS=()=>CF.resetSecret||"SMANPRO";
 const nameOf=u=>(AD.admins.find(a=>a.u==u)||{}).n||u||"",isPast=j=>j.selesai&&+new Date(j.selesai)<Date.now();
 const akses=()=>ME.r=="utama"?["X","XI","XII"]:(ME.akses||[]),allowedK=()=>ALLK.filter(x=>akses().includes(x.split("-")[0]));
 const kls=j=>{if(!Array.isArray(j.kelasList))j.kelasList=parseKelas(j.kelas);return j.kelasList};
@@ -132,11 +143,95 @@ $("#out").onclick=async()=>{$("#am").classList.remove("on");if(await dlg({t:"Kel
 $("#tg").onclick=()=>{const a=$("#app");if(innerWidth<=760)a.classList.toggle("open");else a.classList.toggle("hide")};$("#sbk").onclick=()=>$("#app").classList.remove("open");
 async function start(a){ME=a;if(!ME.akses)ME.akses=a.jenjang||[];$("#lg").style.display="none";$("#app").style.display="flex";
  $("#me").textContent=a.n;$("#app").classList.toggle("pm",a.r!="utama");setBadge();$("#warn").style.display=(API?a.defpw:(await hp(a.s,"admin123"))===a.h||a.tmp===1)?"block":"none";$("#barF").style.display=API?"none":"flex";$("#barA").style.display=API?"flex":"none";
- $("#nv").innerHTML=(a.r=="utama"?T:["Jadwal","Token","Reset","Admin"]).map(t=>`<button data-t="${t}"><span>${IC[t]}</span>${t}</button>`).join("");showTab("Jadwal")}
+ $("#nv").innerHTML=(a.r=="utama"?T:["Jadwal","Token","Reset","Pantau","Admin"]).map(t=>`<button data-t="${t}"><span>${IC[t]}</span>${t}</button>`).join("");showTab("Jadwal")}
 $("#nv").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.t){showTab(b.dataset.t);$("#app").classList.remove("open")}};
-function renderTab(){({Token:rToken,Reset:rReset,Jadwal:rJadwal,Siswa:rSiswa,Pengaturan:rSet,Admin:rAdm})[tab]()}
+function renderTab(){({Token:rToken,Reset:rReset,Pantau:rPantau,Jadwal:rJadwal,Siswa:rSiswa,Pengaturan:rSet,Admin:rAdm})[tab]()}
 function showTab(t){tab=t;$("#pg").textContent=IC[t]+" "+t;$$("#nv button").forEach(b=>b.classList.toggle("on",b.dataset.t==t));$$(".tab").forEach(d=>d.style.display=d.id=="t-"+t?"block":"none");
  pop("Sedang memproses data…");setTimeout(()=>{renderTab();popOff()},350)}
+
+// ---- pantau ----
+// ---- pembuat PDF sederhana (tanpa pustaka luar, bekerja tanpa internet) ----
+function buatPDF(judul,info,tabel){
+ const W=595,H=842,M=36,FS=8,RH=13,pages=[];let ops,y;
+ const clean=s=>String(s??"").replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[\u2013\u2014]/g,"-").replace(/[^\x20-\x7E\xA0-\xFF]/g,"?");
+ const esc=s=>clean(s).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)");
+ const fit=(s,w,fs)=>{s=clean(s);const mx=Math.max(1,Math.floor((w-5)/(fs*0.66)));return s.length>mx?s.slice(0,Math.max(1,mx-1))+".":s};
+ const txt=(x,yy,s,fs,bold)=>ops.push(`BT /${bold?"F2":"F1"} ${fs} Tf ${x} ${(H-yy).toFixed(1)} Td (${esc(s)}) Tj ET`);
+ const page=()=>{ops=[];pages.push(ops);y=M+10};
+ const need=h=>{if(y+h>H-M-14){page();return true}return false};
+ page();
+ txt(M,y+12,judul,15,true);y+=24;
+ const wrap=(s,n)=>{const o=[];let c="";String(s).split(" ").forEach(w=>{if((c+" "+w).trim().length>n){o.push(c);c=w}else c=(c+" "+w).trim()});if(c)o.push(c);return o};
+ info.forEach(l=>wrap(clean(l),105).forEach(z=>{need(14);txt(M,y+9,z,9,false);y+=13}));
+ y+=6;
+ tabel.forEach(tb=>{
+  need(44);txt(M,y+10,tb.t,11,true);y+=18;
+  const hdr=()=>{ops.push(`0.86 0.92 0.98 rg ${M} ${(H-y-RH+3).toFixed(1)} ${tb.k.reduce((a,c)=>a+c.w,0)} ${RH} re f 0 g`);let x=M;tb.k.forEach(c=>{txt(x+2,y+8,fit(c.h,c.w,FS),FS,true);x+=c.w});y+=RH};
+  hdr();
+  if(!tb.r.length){txt(M+2,y+8,tb.kosong||"(tidak ada)",FS,false);y+=RH+6;return}
+  tb.r.forEach((r,ri)=>{
+   if(need(RH+2)){hdr()}
+   if(ri%2)ops.push(`0.96 0.97 0.99 rg ${M} ${(H-y-RH+3).toFixed(1)} ${tb.k.reduce((a,c)=>a+c.w,0)} ${RH} re f 0 g`);
+   let x=M;tb.k.forEach((c,ci)=>{txt(x+2,y+8,fit(r[ci],c.w,FS),FS,false);x+=c.w});y+=RH});
+  y+=10});
+ const N=pages.length;
+ pages.forEach((p,i)=>p.push(`BT /F1 8 Tf ${W-M-80} ${M-18} Td (${esc("Halaman "+(i+1)+" dari "+N)}) Tj ET`));
+ const objs=[];objs[1]="<< /Type /Catalog /Pages 2 0 R >>";
+ objs[3]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
+ objs[4]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+ const kids=[];
+ pages.forEach((p,i)=>{const cn=5+2*i,pn=6+2*i,c=p.join("\n");kids.push(pn+" 0 R");
+  objs[cn]=`<< /Length ${c.length} >>\nstream\n${c}\nendstream`;
+  objs[pn]=`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${cn} 0 R >>`});
+ objs[2]=`<< /Type /Pages /Kids [${kids.join(" ")}] /Count ${N} >>`;
+ let out="%PDF-1.4\n";const off=[];
+ for(let i=1;i<objs.length;i++){off[i]=out.length;out+=`${i} 0 obj\n${objs[i]}\nendobj\n`}
+ const xr=out.length;out+=`xref\n0 ${objs.length}\n0000000000 65535 f \n`;
+ for(let i=1;i<objs.length;i++)out+=String(off[i]).padStart(10,"0")+" 00000 n \n";
+ out+=`trailer\n<< /Size ${objs.length} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`;
+ const u=new Uint8Array(out.length);for(let i=0;i<out.length;i++)u[i]=out.charCodeAt(i)&255;return u}
+function unduhPDF(u8,nama){const b=new Blob([u8],{type:"application/pdf"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nama;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000)}
+
+const PN={id:"",pdf:{},data:null,busy:false},STL={kerja:"Mengerjakan",selesai:"Selesai",lewat:"Waktu habis"};
+const jamS=s=>{if(!s)return"-";const d=new Date(s*1000);return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")};
+const pnJ=()=>CF.jadwal.filter(j=>j.mapel&&vis(j)).sort((a,b)=>String(b.mulai||"").localeCompare(String(a.mulai||"")));
+const pnAktif=j=>{const n=Date.now();return +new Date(j.mulai)<=n&&n<=+new Date(j.selesai)};
+function rPantau(){
+ if(!API){$("#pnt").innerHTML='<div>Pantau memerlukan penyimpanan Apps Script, jadi tidak tersedia pada mode manual.</div>';return}
+ const L=pnJ(),cur=L.find(j=>j.id==PN.id)||L.find(pnAktif)||L[0];PN.id=cur?cur.id:"";
+ $("#pnj").innerHTML=L.map(j=>`<option value="${esc(j.id)}"${j.id==PN.id?" selected":""}>${esc(j.mapel)} · ${esc(j.kelas||"")} · ${esc((j.mulai||"").replace("T"," "))}</option>`).join("")||'<option value="">Belum ada jadwal</option>';
+ pMuat()}
+async function pMuat(){
+ if(!PN.id){$("#pns").innerHTML="";$("#pnt").innerHTML="Belum ada jadwal.";$("#pnb").innerHTML="";return}
+ if(PN.busy)return;PN.busy=true;const id=PN.id;let r;try{r=await post({a:"pantau",tok:TOK,id})}catch(e){r={ok:false,err:String(e)}}PN.busy=false;
+ if(id!=PN.id)return;
+ if(!r.ok){if(r.expired){sessionStorage.clear();location.reload();return}$("#pni").textContent="Gagal memuat: "+r.err;return}
+ PN.data=r;pTampil()}
+function pData(){const r=PN.data,R=r.rows.slice().sort((a,b)=>(a.k+a.n).localeCompare(b.k+b.n)),B=r.belum.slice().sort((a,b)=>(a.k+a.n).localeCompare(b.k+b.n));
+ return{r,R,B,N:R.length+B.length,dn:R.filter(x=>x.st=="selesai").length,pl:R.filter(x=>x.v>0).length,dd:R.filter(x=>x.d>0).length}}
+function pTampil(){const{r,R,B,N,dn,pl,dd}=pData();
+ $("#pni").textContent="Diperbarui "+jamS(r.now)+" · otomatis tiap 30 detik. Pencatatan berjalan otomatis hanya saat jadwal berlangsung.";
+ $("#pns").innerHTML=`<b>${esc(r.jadwal.mapel)}</b> <small style="display:inline">${esc(r.jadwal.kelas||"")}</small><div style="margin-top:6px">Terdaftar <b>${N}</b> · Sudah mulai <b>${R.length}</b> · Selesai <b>${dn}</b> · Belum mulai <b>${B.length}</b> · Keluar layar <b>${pl}</b> · Kirim dini <b>${dd}</b></div>`;
+ $("#pnt").innerHTML=R.length?`<table style="width:100%;border-collapse:collapse;font-size:13px;min-width:560px"><tr style="background:#dbeafb;text-align:left"><th>Kelas</th><th>Nama</th><th>Mulai</th><th>Status</th><th>Keluar layar</th><th>Kirim dini</th><th>Terakhir</th></tr>`+R.map(x=>`<tr style="border-bottom:1px solid #e3edf9;${x.v>0||x.d>0?"background:#fff7d6":""}"><td>${esc(x.k)}</td><td>${esc(x.n)}</td><td>${jamS(x.s)}</td><td>${STL[x.st]||""}</td><td>${x.v}</td><td>${x.d}</td><td>${jamS(x.l)}</td></tr>`).join("")+"</table>":"Belum ada siswa yang mulai (atau jadwal belum berlangsung).";
+ $("#pnb").innerHTML=B.length?`<details><summary><b>Belum mulai (${B.length})</b></summary><div style="margin-top:6px">${B.map(x=>esc(x.k)+" · "+esc(x.n)).join("<br>")}</div></details>`:"";
+ const ok=PN.pdf[PN.id]&&Math.max(0,...R.map(x=>x.l))<=PN.pdf[PN.id];$("#pnh").disabled=!ok}
+$("#pnj").onchange=e=>{PN.id=e.target.value;PN.data=null;pMuat()};
+$("#pnr").onclick=()=>{pop("Memuat…","",600);pMuat()};
+$("#pnp").onclick=()=>{if(!PN.data)return pop("Belum ada data. Klik Segarkan.","er",2500);
+ const{r,R,B,N,dn,pl,dd}=pData(),j=r.jadwal,fm=v=>String(v||"-").replace("T"," "),p=n=>String(n).padStart(2,"0"),t=new Date();
+ const info=["Mata pelajaran : "+j.mapel,"Kelas : "+(j.kelas||"-"),"Jadwal : "+fm(j.mulai)+" s.d. "+fm(j.selesai)+" (durasi "+(j.durasi||"-")+" menit)","Dibuat : "+t.getFullYear()+"-"+p(t.getMonth()+1)+"-"+p(t.getDate())+" "+p(t.getHours())+":"+p(t.getMinutes())+" oleh "+(ME.n||ME.u),
+  "Ringkasan : terdaftar "+N+", sudah mulai "+R.length+", selesai "+dn+", belum mulai "+B.length+", keluar layar "+pl+", kirim dini "+dd,
+  "Catatan: ini hanya petunjuk untuk pengawas. Jawaban resmi ada di Tanggapan Google Formulir. Waktu habis = waktu siswa sudah lewat tanpa catatan selesai."];
+ const u=buatPDF("LAPORAN AKTIVITAS UJIAN",info,[
+  {t:"Aktivitas siswa",k:[{h:"No",w:22},{h:"Kelas",w:38},{h:"Nama",w:164},{h:"Mulai",w:40},{h:"Status",w:70},{h:"Keluar layar",w:74},{h:"Kirim dini",w:58},{h:"Terakhir",w:52}],r:R.map((x,i)=>[i+1,x.k,x.n,jamS(x.s),STL[x.st]||"",x.v,x.d,jamS(x.l)]),kosong:"Belum ada siswa yang mulai."},
+  {t:"Belum mulai",k:[{h:"No",w:30},{h:"Kelas",w:50},{h:"Nama",w:300},{h:"NISN",w:100}],r:B.map((x,i)=>[i+1,x.k,x.n,x.ni]),kosong:"Semua siswa sudah mulai."}]);
+ unduhPDF(u,("Aktivitas-"+j.mapel+"-"+String(j.mulai||"").slice(0,10)+".pdf").replace(/[^A-Za-z0-9._-]+/g,"_"));
+ PN.pdf[PN.id]=r.now;pTampil();pop("PDF diunduh ✓","ok",2500)};
+$("#pnh").onclick=async()=>{if(!PN.pdf[PN.id])return;
+ if(!await dlg({t:"Hapus catatan jadwal ini?",m:"Catatan aktivitas jadwal ini dihapus dari server. Pastikan PDF sudah tersimpan.",y:"Ya, hapus"}))return;
+ pop("Menghapus…");const r=await post({a:"hapusPantau",tok:TOK,id:PN.id});popOff();
+ if(r.ok){PN.pdf[PN.id]=0;pop("Catatan dihapus ("+r.hapus+" siswa) ✓","ok",2500);pMuat()}else pop(r.err||"Gagal menghapus","er",4000)};
+setInterval(()=>{if(tab=="Pantau"&&!document.hidden&&PN.id&&ME&&TOK)pMuat()},30000);
 // ---- token & reset ----
 function rToken(){const n=Date.now(),U=ME.r=="utama",L=CF.jadwal.map((j,i)=>[j,i]).filter(x=>x[0].mapel&&vis(x[0]));
  const card=j=>{let tk="—",sb="Tanpa token";
@@ -178,6 +273,8 @@ function jcard(j,i){const d=`data-i="${i}" data-k`,U=ME.r=="utama";["mulai","sel
 <small>Menentukan kapan siswa boleh menekan Selesai tanpa kode pengawas. Isi 0 jika tidak dibatasi.</small>
 <div class="ck"><input type="checkbox" ${d}="formSatu"${j.formSatu?" checked":""}><span>Formulir hanya <b>1 halaman</b> (tanpa tombol Berikutnya / Kembali)</span></div>
 <small>Centang <b>hanya</b> jika formulir benar-benar 1 halaman. Maka siswa yang menekan Kirim sebelum batas di atas akan terkunci dan harus meminta <b>kode reset</b> dari admin. Jika formulir punya tombol Berikutnya/Kembali, <b>jangan dicentang</b>, karena aplikasi tidak bisa membedakannya dari tombol Kirim.</small>
+<div style="background:#eef7ff;border:1.5px solid #b9d8f5;border-radius:10px;padding:10px;margin:10px 0"><div class="ck"><input type="checkbox" ${d}="anti"${j.anti?" checked":""}><span><b>🛡️ Anti kirim dini</b> — disarankan untuk tiap ujian</span></div>
+${j.anti?`<small>Kode kirim tampil otomatis di layar siswa pada ${+j.kirimSisa||5} menit terakhir. Siswa yang menekan Kirim lebih cepat terkunci dan butuh kode reset.</small><div class="g2"><div class="tk" style="font-size:26px;margin:4px 0">${esc(j.kodeKirim||"")}</div><div><button class="bt" style="margin:0" onclick="kodeBaru(${i})">Buat kode baru</button> <button class="bt o" style="margin:6px 0 0" onclick="salinKode(${i})">Salin</button></div></div><small><b>Di Google Formulir:</b> tambah pertanyaan <i>Jawaban singkat</i> bernama <b>Kode kirim</b>, jadikan <b>wajib diisi</b>, lalu ⋮ → Validasi respons → Ekspresi reguler → Cocok dengan → ketik kode di atas. Formulir lebih dari 1 halaman? Hilangkan centang "1 halaman" di atas; kode kirim tetap bekerja.</small>`:`<small>Centang untuk mencegah siswa mengirim jawaban sebelum menit-menit terakhir. Otomatis menyalakan "1 halaman" dan membuat kode kirim.</small>`}</div>
 <div class="g2"><div><label>Mode token</label><select ${d}="tokenAuto"><option value="0">Token tetap</option><option value="1"${j.tokenAuto?" selected":""}>Berganti otomatis</option></select></div>
 <div><label>Ganti tiap (menit)</label><input type="number" min="1" ${d}="tokenMenit" value="${esc(j.tokenMenit||15)}" ${j.tokenAuto?"":"disabled"}></div></div>
 ${j.tokenAuto?`<small>Token otomatis tampil di menu <b>Token</b>.</small>`:`<div class="g2"><input ${d}="token" value="${esc(j.token||"")}" placeholder="Token (kosong = tanpa token)"><button class="bt" style="margin:0" onclick="gen(${i})">Generate</button></div>`}
@@ -187,18 +284,20 @@ function rJadwal(){const U=ME.r=="utama",L=CF.jadwal.map((j,i)=>[j,i]).filter(x=
  if(!U&&!akses().length){$("#jl").innerHTML='<div class="c">⚠ Anda belum diberi akses jenjang. Hubungi admin utama.</div>';$("#ad").style.display="none";$("#pj").style.display="none";return}
  $("#ad").style.display="inline-block";$("#pj").textContent="Hapus jadwal yang sudah lewat ("+past+")";$("#pj").style.display=past?"inline-block":"none";
  $("#jl").innerHTML=(U?groups(L).map(g=>`<h3 class="gh">👥 ${esc(gName(g[0]))} <small>${g[1].length} jadwal · ${esc(pjs(g[0]))}</small></h3>`+g[1].map(x=>jcard(x[0],x[1])).join("")).join(""):L.map(x=>jcard(x[0],x[1])).join(""))||'<div class="c">Belum ada jadwal.</div>'}
-$("#jl").addEventListener("input",e=>{const t=e.target,i=t.dataset.i,k=t.dataset.k;if(i==null||!k||k=="tokenAuto")return;const jj=CF.jadwal[i];
+$("#jl").addEventListener("input",e=>{const t=e.target,i=t.dataset.i,k=t.dataset.k;if(i==null||!k||k=="tokenAuto"||k=="anti")return;const jj=CF.jadwal[i];
  if(k=="formSatu"){jj.formSatu=t.checked;return}
  if(/^(mulai|selesai)[TJ]$/.test(k)){jj[k]=t.value;if(k=="mulaiT"&&!jj.selesaiT){jj.selesaiT=t.value;const o=document.querySelector(`[data-i="${i}"][data-k="selesaiT"]`);if(o)o.value=t.value}
   const f=k.replace(/[TJ]$/,"");jj[f]=(jj[f+"T"]&&jj[f+"J"])?jj[f+"T"]+"T"+jj[f+"J"]:"";return}
  CF.jadwal[i][k]=["durasi","kirimSisa","tokenMenit"].includes(k)?+t.value:t.value});
-$("#jl").addEventListener("change",e=>{const t=e.target;if(t.dataset.kc||t.dataset.kg){toggleKelas(+t.dataset.i,t.dataset.kg?"g":"c",t.dataset.kg||t.dataset.kc,t.checked);return}if(t.dataset.k=="owner"){rJadwal();return}if(t.dataset.k=="tokenAuto"){const j=CF.jadwal[t.dataset.i];j.tokenAuto=t.value=="1";if(j.tokenAuto){j.tokenSecret=j.tokenSecret||rnd(12);j.tokenMenit=j.tokenMenit||15}rJadwal()}});
+$("#jl").addEventListener("change",e=>{const t=e.target;if(t.dataset.kc||t.dataset.kg){toggleKelas(+t.dataset.i,t.dataset.kg?"g":"c",t.dataset.kg||t.dataset.kc,t.checked);return}if(t.dataset.k=="owner"){rJadwal();return}if(t.dataset.k=="anti"){const j=CF.jadwal[t.dataset.i];j.anti=t.checked;if(j.anti){j.formSatu=true;j.kirimSisa=+j.kirimSisa>0?+j.kirimSisa:5;j.kodeKirim=j.kodeKirim||rnd(6)}mark();rJadwal();return}if(t.dataset.k=="tokenAuto"){const j=CF.jadwal[t.dataset.i];j.tokenAuto=t.value=="1";if(j.tokenAuto){j.tokenSecret=j.tokenSecret||rnd(12);j.tokenMenit=j.tokenMenit||15}rJadwal()}});
 async function delJ(i){if(await dlg({t:"Hapus jadwal?",m:"Jadwal ini akan dihapus dari daftar.",y:"Ya, hapus"})){DEL.push(CF.jadwal[i].id);CF.jadwal.splice(i,1);mark();rJadwal()}}
 function dupJ(i){const j=JSON.parse(JSON.stringify(CF.jadwal[i])),p=n=>String(n).padStart(2,"0"),sh=v=>{const t=+new Date(v);if(!v||isNaN(t))return v;const d=new Date(t+864e5);return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes())};
- j.id="u"+Date.now()+rnd(4);j.owner=ME.u;j.mapel=j.mapel+" (salinan)";j.mulai=sh(j.mulai);j.selesai=sh(j.selesai);j.mulaiT=(j.mulai||"").slice(0,10);j.mulaiJ=(j.mulai||"").slice(11,16);j.selesaiT=(j.selesai||"").slice(0,10);j.selesaiJ=(j.selesai||"").slice(11,16);if(j.tokenAuto)j.tokenSecret=rnd(12);else if(j.token)j.token=rnd(6);
+ j.id="u"+Date.now()+rnd(4);j.owner=ME.u;j.mapel=j.mapel+" (salinan)";j.mulai=sh(j.mulai);j.selesai=sh(j.selesai);j.mulaiT=(j.mulai||"").slice(0,10);j.mulaiJ=(j.mulai||"").slice(11,16);j.selesaiT=(j.selesai||"").slice(0,10);j.selesaiJ=(j.selesai||"").slice(11,16);if(j.tokenAuto)j.tokenSecret=rnd(12);else if(j.token)j.token=rnd(6);if(j.anti)j.kodeKirim=rnd(6);
  CF.jadwal.splice(i+1,0,j);mark();rJadwal();pop("Jadwal diduplikat ke hari berikutnya ✓","ok",2200)}
 $("#pj").onclick=async()=>{const ids=CF.jadwal.filter(j=>vis(j)&&isPast(j)).map(j=>j.id);if(!ids.length)return;
  if(await dlg({t:"Hapus jadwal yang sudah lewat?",m:ids.length+" jadwal yang waktu selesainya sudah lewat akan dihapus dari daftar.",y:"Ya, hapus"})){DEL.push(...ids);CF.jadwal=CF.jadwal.filter(j=>!ids.includes(j.id));mark();rJadwal()}};
+function kodeBaru(i){CF.jadwal[i].kodeKirim=rnd(6);mark();rJadwal()}
+function salinKode(i){const v=CF.jadwal[i].kodeKirim||"";try{navigator.clipboard.writeText(v);pop("Kode disalin ✓","ok",1800)}catch(e){pop("Salin manual: "+v,"",3500)}}
 function gen(i){CF.jadwal[i].token=rnd(6);mark();rJadwal()}
 $("#ad").onclick=()=>{CF.jadwal.push({id:"u"+Date.now()+rnd(4),owner:ME.u,mapel:"",kelas:"",kelasList:[],formSatu:false,link:"",mulai:"",selesai:"",mulaiT:"",mulaiJ:"",selesaiT:"",selesaiJ:"",durasi:90,kirimSisa:5,halaman:1,token:"",tokenAuto:false,tokenMenit:15,tokenSecret:""});mark();rJadwal()};
 // ---- siswa ----

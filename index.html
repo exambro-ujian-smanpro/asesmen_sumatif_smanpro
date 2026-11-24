@@ -32,7 +32,8 @@ input:focus,select:focus{outline:3px solid #9cc8f2;border-color:var(--blue)}
 .hd .l3{width:30px;height:38px;animation:none;transform:rotateY(-18deg)}.hd .who{flex:1;min-width:0;font-size:12px;line-height:1.25}.who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #tm{font:700 20px ui-monospace,Menlo,monospace;background:var(--green);padding:4px 10px;border-radius:8px}#tm.w{background:#e98a00}#tm.d{background:var(--red);animation:bl 1s infinite}@keyframes bl{50%{opacity:.55}}
 .hd button{border:0;background:var(--gold);color:var(--navy);font-weight:700;border-radius:8px;padding:7px 10px;font-size:12px}
-iframe{flex:1;width:calc(100% - 12px);margin:6px;border:0;border-radius:10px;background:#fff}.sm{background:rgba(10,37,81,.9);padding:3px;font-size:10.5px;text-align:center;color:#c5d4ea;padding-bottom:calc(3px + env(safe-area-inset-bottom))}
+iframe{flex:1;width:calc(100% - 12px);margin:6px;border:0;border-radius:10px;background:#fff}.kk{display:none;background:#ffd23f;color:#0a2551;font-weight:700;font-size:15px;text-align:center;padding:8px 10px;border-bottom:3px solid #0a2551;word-break:break-word}.kk.on{display:block}
+.sm{background:rgba(10,37,81,.9);padding:3px;font-size:10.5px;text-align:center;color:#c5d4ea;padding-bottom:calc(3px + env(safe-area-inset-bottom))}
 .ov{display:none;position:fixed;inset:0;z-index:9;background:rgba(10,37,81,.97);color:#fff;align-items:center;justify-content:center;text-align:center;padding:26px;flex-direction:column}.ov.on{display:flex}
 .ov h2{font-size:22px;color:var(--gold);margin-bottom:8px}.ov input{max-width:240px;text-align:center;color:var(--ink);margin-top:12px}.ov .btn{max-width:260px}
 .row{border:1.5px solid #dbe4f0;border-radius:10px;padding:8px;margin:8px 0;background:#f7faff}.row input{margin:3px 0;padding:8px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -81,7 +82,7 @@ select.fd{color:#9aa7bb!important;-webkit-text-fill-color:#9aa7bb!important}
 <p class="note" id="info">Aplikasi akan terkunci jika Anda keluar dari halaman ujian.</p></div>
 <div class="ft">Created by SMAN 1 Pronojiwo</div></section>
 
-<section class="scr" id="exam"><div class="hd"><div class="l3 sm1"></div><div class="who"><b id="wn"></b><span id="wm"></span></div><span id="tm">--:--</span><button id="fin">Selesai</button></div>
+<section class="scr" id="exam"><div class="hd"><div class="l3 sm1"></div><div class="who"><b id="wn"></b><span id="wm"></span></div><span id="tm">--:--</span><button id="fin">Selesai</button></div><div class="kk" id="kk"></div>
 <iframe id="fr" title="Formulir ujian" allow="fullscreen" referrerpolicy="no-referrer"></iframe><div class="sm">Created by SMAN 1 Pronojiwo</div></section>
 
 <section class="scr" id="done"><div class="hero"><div class="stage"><div class="l3 lg"></div></div><h1 id="dt">Ujian selesai</h1><p id="dm"></p></div>
@@ -148,7 +149,7 @@ $("#go").onclick=async()=>{let nm=$("#nm").value.trim().toUpperCase(),kl=$("#kl"
  if(!ni)return err("Isi NISN.");
  if(!j||stat(j)!="open"||!kelasCocok(j,kl))return err("Pilih mata pelajaran yang sedang diujikan untuk kelas Anda.");
  let lnk=null;
- if(j.sv){$("#go").disabled=true;pop("Memeriksa token…");const r=await apiPost({a:"mulai",id:j.id,kl,ni,tk});popOff();$("#go").disabled=false;if(!r.ok)return err(r.err||"Gagal memeriksa token.");lnk=r.link}
+ if(j.sv){$("#go").disabled=true;pop("Memeriksa token…");const r=await apiPost({a:"mulai",id:j.id,kl,ni,nm,tk});popOff();$("#go").disabled=false;if(!r.ok)return err(r.err||"Gagal memeriksa token.");lnk=r.link}
  else if(j.tokenAuto){if(!ZK.tokenOK(j.tokenSecret||"",+j.tokenMenit||15,tk))return err("Token salah atau sudah berganti. Minta token terbaru kepada pengawas.")}else if(j.token&&tk!==String(j.token).toUpperCase())return err("Token ujian salah. Minta token kepada pengawas.");
  const dn=J("done")||{},key=nm+"|"+kl+"|"+ni+"|"+j.id;if(dn[key])return err("Anda sudah menyelesaikan ujian ini.");
  popOff();
@@ -159,13 +160,13 @@ function buildUrl(l){try{const u=new URL(l.trim()),m={NAMA:S.nm,KELAS:S.kl,NISN:
  [...u.searchParams.entries()].forEach(([k,v])=>{const x=m[v.trim().toUpperCase()];if(x!==undefined)u.searchParams.set(k,x)});
  u.searchParams.set("embedded","true");return u.toString()}catch(e){return norm(l)}}
 async function enter(){const j=cfg.jadwal.find(x=>x.id==S.id);$("#wn").textContent=S.nm;$("#wm").textContent=`${S.kl} · ${j.mapel}`;
- loads=0;$("#fr").src=buildUrl(S.link||j.link);show("exam");act=true;
+ loads=0;$("#fr").src=buildUrl(S.link||j.link);show("exam");act=true;$("#kk").classList.remove("on");if(S.kk)showKode();
  try{await document.documentElement.requestFullscreen?.()}catch(e){}try{wl=await navigator.wakeLock?.request("screen")}catch(e){}
  clearInterval(tk);tk=setInterval(tick,500);tick();if(S.v.length>=cfg.maksPelanggaran)lockIt();if(S.early)showEarly()}
 function tick(){const r=S.end-Date.now();if(r<=0)return finish("Waktu ujian habis","Jawaban yang sudah Anda kirim melalui formulir telah tersimpan.");
  const s=Math.ceil(r/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),t=$("#tm");
- t.textContent=(h?h+":":"")+String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");t.className=r<300000?"d":r<600000?"w":""}
-function finish(t,m){act=false;clearInterval(tk);$("#fr").src="about:blank";const d=J("done")||{};d[S.key]=Date.now();localStorage.done=JSON.stringify(d);
+ t.textContent=(h?h+":":"")+String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");t.className=r<300000?"d":r<600000?"w":"";kodeKirim()}
+function finish(t,m){lap("f");act=false;$("#kk").classList.remove("on");clearInterval(tk);$("#fr").src="about:blank";const d=J("done")||{};d[S.key]=Date.now();localStorage.done=JSON.stringify(d);
  localStorage.removeItem("sess");S=null;document.exitFullscreen?.().catch(()=>{});$("#warn").classList.remove("on");$("#lock").classList.remove("on");$("#early").classList.remove("on");
  $("#dt").textContent=t;$("#dm").textContent=m;show("done")}
 $("#fin").onclick=async()=>{const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kirimSisa||0,rem=(S.end-Date.now())/60000,lim=N>0?N:10;
@@ -177,7 +178,7 @@ $("#fin").onclick=async()=>{const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kiri
  out()};
 history.pushState(null,"",location.href);addEventListener("popstate",()=>{if(act)history.pushState(null,"",location.href)});
 // ---- pengawasan ----
-function viol(why){if(!act||$("#lock").classList.contains("on"))return;S.v.push({t:Date.now(),w:why});sv();const n=S.v.length,mx=cfg.maksPelanggaran;
+function viol(why){if(!act||$("#lock").classList.contains("on"))return;S.v.push({t:Date.now(),w:why});sv();lap("v",S.v.length);const n=S.v.length,mx=cfg.maksPelanggaran;
  if(n>=mx)return lockIt();$("#wt").textContent=`Pelanggaran ${n} dari ${mx} (${why}). Pada pelanggaran ke-${mx} layar ujian terkunci.`;
  $("#warn").classList.add("on");const b=$("#wb");b.disabled=true;let c=4;b.textContent="Tunggu "+c+" dtk";
  const i=setInterval(()=>{c--;if(c<=0){clearInterval(i);b.disabled=false;b.textContent="Kembali ke ujian"}else b.textContent="Tunggu "+c+" dtk"},1000)}
@@ -202,7 +203,13 @@ function ask(o){popOff();return new Promise(res=>{$("#dgt").textContent=o.t||"Ko
  const done=v=>{$("#dlg").classList.remove("on");res(v)};
  $("#dgy").onclick=()=>done(o.input?i.value.trim():true);$("#dgn").onclick=()=>done(o.input?null:false)})}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(b&&!b.disabled&&b.id!=="dgy"&&b.id!=="dgn")pop("Sedang memproses data…","",550)});
-let loads=0;
+let loads=0,kkBusy=false,kkNext=0;
+function lap(e,n){try{if(!S)return;const j=cfg.jadwal.find(x=>x.id==S.id);if(j&&j.sv)apiPost({a:"lapor",id:S.id,ni:S.ni,e,n})}catch(x){}}
+function showKode(){const b=$("#kk");b.textContent="🔑 Kode kirim: "+S.kk+" — ketik kode ini di kolom Kode kirim pada formulir, lalu tekan Kirim.";b.classList.add("on")}
+function kodeKirim(){if(!S||!act||S.kk||kkBusy||Date.now()<kkNext)return;const j=cfg.jadwal.find(x=>x.id==S.id);if(!j||!j.kk||!j.sv)return;
+ const N=(+j.kirimSisa>0?+j.kirimSisa:5)*60000;if(S.end-Date.now()>N)return;kkBusy=true;
+ apiPost({a:"kode",id:S.id,ni:S.ni}).then(r=>{kkBusy=false;if(!S)return;if(r.ok){S.kk=r.kode;sv();showKode()}
+  else{kkNext=Date.now()+(r.tunggu?Math.min(r.tunggu*1000,15000):15000);if(!r.tunggu){const b=$("#kk");b.textContent="🔑 "+(r.err||"Kode kirim belum tersedia. Hubungi pengawas.");b.classList.add("on")}}})}
 function showEarly(){const j=cfg.jadwal.find(x=>x.id==S.id)||{};$("#etx").textContent="Anda mengirim jawaban lebih cepat dari ketentuan (batas: "+(+j.kirimSisa||0)+" menit sebelum waktu ujian berakhir). Minta admin mereset akun Anda, lalu masukkan token dari admin. Kesempatan mengerjakan ulang hanya 1 kali; jika melanggar lagi, ujian dianggap selesai.";
  $("#eid").textContent=S.nm+" · "+S.kl+" · NISN "+S.ni;$("#ec").value="";$("#early").classList.add("on")}
 $("#eb").onclick=async()=>{const k=$("#ec").value.trim().toUpperCase();pop("Sedang memproses data…");await wait(700);
@@ -215,7 +222,7 @@ $("#eb").onclick=async()=>{const k=$("#ec").value.trim().toUpperCase();pop("Seda
 $("#fr").addEventListener("load",()=>{if(!act||!S)return;loads++;const j=cfg.jadwal.find(x=>x.id==S.id)||{},N=+j.kirimSisa||0;
  if(j.formSatu&&N>0&&!S.early&&loads>1&&(S.end-Date.now())/60000>N){
   if(S.rs>=1){finish("Ujian dianggap selesai","Anda mengirim jawaban lebih cepat dari ketentuan untuk kedua kalinya. Kesempatan mengerjakan ulang sudah terpakai, sehingga ujian dinyatakan selesai.");return}
-  S.early=true;sv();showEarly()}});
+  S.early=true;sv();lap("d");showEarly()}});
 const DJ="Asesmen Sumatif Akhir Semester Ganjil",DJ2="Tahun Ajaran 2026/2027",DA="Jl. A. Yani - Pronojiwo";
 let SL=[],lg="";
 function titles(c){let a=c.judul||DJ,b=c.judul2;if(b===undefined){const i=a.indexOf("Tahun Ajaran");if(i>0){b=a.slice(i);a=a.slice(0,i).trim()}else b=DJ2}return[a,b]}
